@@ -17,9 +17,11 @@ public class BookInteract : MonoBehaviour
     public string[] pages;
 
     private int currentPage = 0;
-    private bool playerInRange = false;
     private bool isReading = false;
-    private PlayerMovement characterController;
+    public bool IsReading => isReading;
+
+    private MouseLook mouseLook;
+
 
     void Start()
     {
@@ -29,33 +31,27 @@ public class BookInteract : MonoBehaviour
         if (prevButton != null) prevButton.onClick.AddListener(PrevPage);
         if (closeButton != null) closeButton.onClick.AddListener(CloseBook);
 
-        characterController = FindFirstObjectByType<PlayerMovement>();
+        mouseLook = FindFirstObjectByType<MouseLook>();
     }
 
-    void Update()
+    public void OpenBook()
     {
-        if (playerInRange && !isReading && Input.GetKeyDown(KeyCode.E))
-        {
-            OpenBook();
-        }
-    }
+        if (isReading) return;
 
-    void OpenBook()
-    {
         isReading = true;
         readPanel.SetActive(true);
         ShowPage(0);
         LockPlayer(true);
     }
 
-    void CloseBook()
+    private void CloseBook()
     {
         isReading = false;
         readPanel.SetActive(false);
         LockPlayer(false);
     }
 
-    void ShowPage(int index)
+    private void ShowPage(int index)
     {
         currentPage = Mathf.Clamp(index, 0, pages.Length - 1);
         bookText.text = pages[currentPage];
@@ -65,36 +61,19 @@ public class BookInteract : MonoBehaviour
         closeButton.gameObject.SetActive(currentPage == pages.Length - 1);
     }
 
-    void NextPage() => ShowPage(currentPage + 1);
-    void PrevPage() => ShowPage(currentPage - 1);
+    private void NextPage() => ShowPage(currentPage + 1);
+    private void PrevPage() => ShowPage(currentPage - 1);
 
-    void LockPlayer(bool locked)
+    private void LockPlayer(bool locked)
     {
-        if (characterController != null)
-        {
-            characterController.enabled = !locked;
-        }
+        var movement = FindFirstObjectByType<PlayerMovement>();
+        if (movement != null)
+            movement.enabled = !locked;
 
-        var look = Camera.main.GetComponent<MonoBehaviour>();
-        if (look != null && look.GetType().Name.Contains("Look"))
-        {
-            look.enabled = !locked;
-        }
+        if (mouseLook != null)
+            mouseLook.enabled = !locked;
 
         Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = locked;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Trigger Entered");
-        if (other.CompareTag("Player"))
-            playerInRange = true;
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-            playerInRange = false;
     }
 }
