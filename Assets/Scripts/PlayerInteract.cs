@@ -45,6 +45,19 @@ public class PlayerInteract : MonoBehaviour
 
                 return;
             }
+
+            Door door = hit.collider.GetComponentInParent<Door>();
+            if (door != null)
+            {
+                interactPrompt.text = door.isOpen ? "[E] Close" : "[E] Open";
+                interactPrompt.gameObject.SetActive(true);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                    door.ToggleDoor();
+
+                return;
+            }
+
         }
 
         focusedBook = null;
