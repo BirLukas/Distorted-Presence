@@ -12,6 +12,9 @@ public class Door : MonoBehaviour
     private Quaternion openRotation;
     private bool isMoving = false;
 
+    [Header("Lock Settings")]
+    public bool isLocked = false;
+
     void Start()
     {
         if (doorVisual == null)
@@ -39,8 +42,18 @@ public class Door : MonoBehaviour
 
     public void ToggleDoor()
     {
+        if (isLocked) return;
         if (isMoving) return;
 
         isOpen = !isOpen;
+    }
+    public void LockDoor()
+    {
+        isLocked = true;
+    }
+
+    public void UnlockDoor()
+    {
+        isLocked = false;
     }
 }

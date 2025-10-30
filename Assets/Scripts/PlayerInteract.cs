@@ -49,6 +49,17 @@ public class PlayerInteract : MonoBehaviour
             Door door = hit.collider.GetComponentInParent<Door>();
             if (door != null)
             {
+                if (door.isLocked)
+                {
+                    if (!interactPrompt.gameObject.activeSelf)
+                    {
+                        interactPrompt.text = "You need to read the book first";
+                        interactPrompt.gameObject.SetActive(true);
+                    }
+
+                    return;
+                }
+
                 interactPrompt.text = door.isOpen ? "[E] Close" : "[E] Open";
                 interactPrompt.gameObject.SetActive(true);
 

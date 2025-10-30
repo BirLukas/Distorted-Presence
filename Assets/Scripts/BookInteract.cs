@@ -20,6 +20,9 @@ public class BookInteract : MonoBehaviour
     private bool isReading = false;
     public bool IsReading => isReading;
 
+    private bool hasBeenRead = false;
+    public bool HasBeenReadOnce => hasBeenRead;
+
     private MouseLook mouseLook;
 
 
@@ -42,6 +45,9 @@ public class BookInteract : MonoBehaviour
         readPanel.SetActive(true);
         ShowPage(0);
         LockPlayer(true);
+
+        if (!hasBeenRead)
+            hasBeenRead = true;
     }
 
     private void CloseBook()
