@@ -2,58 +2,111 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("References")]
-    public Camera playerCamera;
-    public Transform cameraHolder;
-    public Transform cameraModel;
-    public Transform aimPosition;
-    public Transform restPosition;
-    public CanvasGroup photoUI;
-    public CanvasGroup flashEffect;
-    public AudioSource shutterSound;
+    [Header("Reference")]
+    public Camera playerCamera;      // Main Camera
+    public Camera photoCamera;       // Photo Camera (disabled on start)
+    public Transform cameraModel;    // 3D model fotoaparátu
+    public Transform restPosition;   // pozice v ruce
+    public Transform aimPosition;    // pozice u oka
+    public CanvasGroup photoUI;      // rámeèek a UI zobrazované pøi míøení
+    public CanvasGroup flashEffect;  // efekt bílého záblesku pøi focení
+    public AudioSource shutterSound; // zvuk závìrky
 
-    [Header("Camera Settings")]
-    public float zoomFOV = 35f;
-    public float normalFOV = 60f;
-    public float transitionSpeed = 6f;
-    public float cameraMoveSpeed = 8f;
+    [Header("Settings")]
+    public float moveSpeed = 8f;         // rychlost posunu modelu
+    public float rotationSpeed = 8f;     // rychlost rotace modelu
+    public float normalFOV = 60f;        // bìžný FOV
+    public float zoomFOV = 35f;          // FOV pøi zamìøení
+    public float fovSmoothSpeed = 6f;    // rychlost zmìny FOV
 
     private bool isAiming = false;
 
-    void Update()
+    void Start()
     {
-        if (Input.GetMouseButtonDown(1))
-            isAiming = true;
-        if (Input.GetMouseButtonUp(1))
-            isAiming = false;
-     
-        float targetFOV = isAiming ? zoomFOV : normalFOV;
-        playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * transitionSpeed);
+        if (photoCamera != null)
+            photoCamera.enabled = false;
 
-        Transform target = isAiming ? aimPosition : restPosition;
-        cameraModel.position = Vector3.Lerp(cameraModel.position, target.position, Time.deltaTime * cameraMoveSpeed);
-        cameraModel.rotation = Quaternion.Lerp(cameraModel.rotation, target.rotation, Time.deltaTime * cameraMoveSpeed);
+        if (flashEffect != null)
+            flashEffect.alpha = 0f;
 
         if (photoUI != null)
-            photoUI.alpha = Mathf.Lerp(photoUI.alpha, isAiming ? 1f : 0f, Time.deltaTime * 8f);
+            photoUI.alpha = 0f;
+    }
 
-        if (isAiming && Input.GetMouseButtonDown(0))
+    void Update()
+    {
+        // --- AIMING (RMB) ---
+        if (Input.GetMouseButtonDown(1)) isAiming = true;
+        if (Input.GetMouseButtonUp(1)) isAiming = false;
+
+        // --- CAMERA SWITCH ---
+        if (photoCamera != null)
         {
-            TakePhoto();
+            if (isAiming)
+            {
+                photoCamera.enabled = true;
+                playerCamera.enabled = false;
+            }
+            else
+            {
+                photoCamera.enabled = false;
+                playerCamera.enabled = true;
+            }
         }
+
+        // --- MOVE CAMERA MODEL ---
+        Transform target = isAiming ? aimPosition : restPosition;
+
+        cameraModel.position = Vector3.Lerp(
+            cameraModel.position,
+            target.position,
+            Time.deltaTime * moveSpeed
+        );
+
+        cameraModel.rotation = Quaternion.Lerp(
+            cameraModel.rotation,
+            target.rotation,
+            Time.deltaTime * rotationSpeed
+        );
+
+        // --- FOV ANIMATION ---
+        float targetFOV = isAiming ? zoomFOV : normalFOV;
+        Camera activeCam = isAiming && photoCamera != null ? photoCamera : playerCamera;
+
+        activeCam.fieldOfView = Mathf.Lerp(
+            activeCam.fieldOfView,
+            targetFOV,
+            Time.deltaTime * fovSmoothSpeed
+        );
+
+        // --- UI ANIMATION ---
+        if (photoUI != null)
+        {
+            float targetAlpha = isAiming ? 1f : 0f;
+            photoUI.alpha = Mathf.Lerp(photoUI.alpha, targetAlpha, Time.deltaTime * 8f);
+        }
+
+        // --- TAKE PHOTO ---
+        if (isAiming && Input.GetMouseButtonDown(0))
+            TakePhoto();
     }
 
     void TakePhoto()
     {
-        Debug.Log("Photo Taken!");
-        if (shutterSound != null) shutterSound.Play();
-        if (flashEffect != null) StartCoroutine(FlashRoutine());
+        Debug.Log("Photo taken!");
+
+        if (shutterSound != null)
+            shutterSound.Play();
+
+        if (flashEffect != null)
+            StartCoroutine(FlashRoutine());
     }
 
     System.Collections.IEnumerator FlashRoutine()
     {
         flashEffect.alpha = 1f;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
+
         while (flashEffect.alpha > 0)
         {
             flashEffect.alpha -= Time.deltaTime * 3f;
