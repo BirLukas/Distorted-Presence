@@ -44,13 +44,11 @@ public class CameraController : MonoBehaviour
         {
             if (isAiming)
             {
-                photoCamera.enabled = true;
                 playerCamera.enabled = false;
             }
             else
             {
-                photoCamera.enabled = false;
-                playerCamera.enabled = true;
+                playerCamera.enabled = isAiming;
             }
         }
 
@@ -89,6 +87,14 @@ public class CameraController : MonoBehaviour
         // --- TAKE PHOTO ---
         if (isAiming && Input.GetMouseButtonDown(0))
             TakePhoto();
+    }
+    void LateUpdate()
+    {
+        if (photoCamera != null)
+        {
+            photoCamera.transform.position = playerCamera.transform.position;
+            photoCamera.transform.rotation = playerCamera.transform.rotation;
+        }
     }
 
     void TakePhoto()
