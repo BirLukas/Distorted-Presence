@@ -3,21 +3,21 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [Header("Reference")]
-    public Camera playerCamera;      // Main Camera
-    public Camera photoCamera;       // Photo Camera (disabled on start)
-    public Transform cameraModel;    // 3D model fotoaparátu
-    public Transform restPosition;   // pozice v ruce
-    public Transform aimPosition;    // pozice u oka
-    public CanvasGroup photoUI;      // rámeèek a UI zobrazované pøi míøení
-    public CanvasGroup flashEffect;  // efekt bílého záblesku pøi focení
-    public AudioSource shutterSound; // zvuk závìrky
+    public Camera playerCamera;
+    public Camera photoCamera;
+    public Transform cameraModel;
+    public Transform restPosition;
+    public Transform aimPosition;
+    public CanvasGroup photoUI;
+    public CanvasGroup flashEffect;
+    public AudioSource shutterSound;
 
     [Header("Settings")]
-    public float moveSpeed = 8f;         // rychlost posunu modelu
-    public float rotationSpeed = 8f;     // rychlost rotace modelu
-    public float normalFOV = 60f;        // bìžný FOV
-    public float zoomFOV = 35f;          // FOV pøi zamìøení
-    public float fovSmoothSpeed = 6f;    // rychlost zmìny FOV
+    public float moveSpeed = 8f;
+    public float rotationSpeed = 8f;
+    public float normalFOV = 60f;
+    public float zoomFOV = 35f;
+    public float fovSmoothSpeed = 6f;
 
     private bool isAiming = false;
 
@@ -35,24 +35,21 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        // --- AIMING (RMB) ---
+        // AIMING (Right Mouse Button)
         if (Input.GetMouseButtonDown(1)) isAiming = true;
         if (Input.GetMouseButtonUp(1)) isAiming = false;
 
-        // --- CAMERA SWITCH ---
+        // CAMERA SWITCH (Correct for Unity 6 URP)
         if (photoCamera != null)
         {
-            if (isAiming)
-            {
-                playerCamera.enabled = false;
-            }
-            else
-            {
-                playerCamera.enabled = isAiming;
-            }
+            // Main camera ALWAYS stays enabled
+            playerCamera.enabled = true;
+
+            // PhotoCamera is only for aiming
+            photoCamera.enabled = isAiming;
         }
 
-        // --- MOVE CAMERA MODEL ---
+        // MOVE CAMERA MODEL
         Transform target = isAiming ? aimPosition : restPosition;
 
         cameraModel.position = Vector3.Lerp(
@@ -67,29 +64,41 @@ public class CameraController : MonoBehaviour
             Time.deltaTime * rotationSpeed
         );
 
-        // --- FOV ANIMATION ---
+        // FOV ANIMATION
         float targetFOV = isAiming ? zoomFOV : normalFOV;
-        Camera activeCam = isAiming && photoCamera != null ? photoCamera : playerCamera;
 
-        activeCam.fieldOfView = Mathf.Lerp(
-            activeCam.fieldOfView,
+        // hlavní pohled musí mít vždy FOV, aby fungoval MouseLook
+        playerCamera.fieldOfView = Mathf.Lerp(
+            playerCamera.fieldOfView,
             targetFOV,
             Time.deltaTime * fovSmoothSpeed
         );
 
-        // --- UI ANIMATION ---
+        // PhotoCamera musí mít stejný zoom, jinak AIM nic neudìlá
+        if (photoCamera != null)
+        {
+            photoCamera.fieldOfView = Mathf.Lerp(
+                photoCamera.fieldOfView,
+                targetFOV,
+                Time.deltaTime * fovSmoothSpeed
+            );
+        }
+
+        // UI ANIMATION
         if (photoUI != null)
         {
             float targetAlpha = isAiming ? 1f : 0f;
             photoUI.alpha = Mathf.Lerp(photoUI.alpha, targetAlpha, Time.deltaTime * 8f);
         }
 
-        // --- TAKE PHOTO ---
+        // TAKE PHOTO
         if (isAiming && Input.GetMouseButtonDown(0))
             TakePhoto();
     }
+
     void LateUpdate()
     {
+        // PHOTO CAMERA FOLLOW MAIN CAMERA
         if (photoCamera != null)
         {
             photoCamera.transform.position = playerCamera.transform.position;
