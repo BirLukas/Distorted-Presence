@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private MeshRenderer[] cameraRenderers;
+    public static bool IsAimingGlobal = false;
+
+
     [Header("Reference")]
     public Camera playerCamera;
     public Camera photoCamera;
@@ -23,6 +27,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        cameraRenderers = cameraModel.GetComponentsInChildren<MeshRenderer>(true);
+
         if (photoCamera != null)
             photoCamera.enabled = false;
 
@@ -35,6 +41,14 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        IsAimingGlobal = isAiming;
+
+        if (BookInteract.IsUIOpen)
+        {
+            isAiming = false;
+            return;
+        }
+
         // AIMING (Right Mouse Button)
         if (Input.GetMouseButtonDown(1)) isAiming = true;
         if (Input.GetMouseButtonUp(1)) isAiming = false;
@@ -42,12 +56,16 @@ public class CameraController : MonoBehaviour
         // CAMERA SWITCH (Correct for Unity 6 URP)
         if (photoCamera != null)
         {
-            // Main camera ALWAYS stays enabled
             playerCamera.enabled = true;
-
-            // PhotoCamera is only for aiming
             photoCamera.enabled = isAiming;
+
+            foreach (var r in cameraRenderers)
+            {
+                r.enabled = !isAiming;
+            }
         }
+
+
 
         // MOVE CAMERA MODEL
         Transform target = isAiming ? aimPosition : restPosition;

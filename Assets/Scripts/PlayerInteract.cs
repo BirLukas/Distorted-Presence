@@ -19,6 +19,10 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        if (BookInteract.IsUIOpen || CameraController.IsAimingGlobal)
+            return;
+
+
         if (focusedBook != null && focusedBook.IsReading)
         {
             if (interactPrompt != null && interactPrompt.gameObject.activeSelf)

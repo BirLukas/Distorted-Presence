@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (BookInteract.IsUIOpen)
+            return;
+
         isGrounded = controller.isGrounded;
 
         if (isGrounded && velocity.y < 0)

@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Interactable
-  - 'CameraModelLayer '
+  - CameraModel
   - UIOnly
   - 
   - 
@@ -43,6 +43,15 @@ TagManager:
     locked: 0
   - name: CameraUI
     uniqueID: 1300255959
+    locked: 0
+  - name: UI_Gameplay
+    uniqueID: 1461240259
+    locked: 0
+  - name: UI_Book
+    uniqueID: 2392559175
+    locked: 0
+  - name: UI_Camera
+    uniqueID: 4219940215
     locked: 0
   m_RenderingLayers:
   - Default

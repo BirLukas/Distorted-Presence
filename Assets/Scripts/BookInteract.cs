@@ -25,6 +25,8 @@ public class BookInteract : MonoBehaviour
 
     private MouseLook mouseLook;
 
+    public static bool IsUIOpen = false;
+
 
     void Start()
     {
@@ -39,6 +41,8 @@ public class BookInteract : MonoBehaviour
 
     public void OpenBook()
     {
+        IsUIOpen = true;
+
         if (isReading) return;
 
         isReading = true;
@@ -52,6 +56,7 @@ public class BookInteract : MonoBehaviour
 
     private void CloseBook()
     {
+        IsUIOpen = false;
         isReading = false;
         readPanel.SetActive(false);
         LockPlayer(false);
