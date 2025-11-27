@@ -956,6 +956,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1977828675551396994, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: near clip plane
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1977828675551396994, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 247
       objectReference: {fileID: 0}
