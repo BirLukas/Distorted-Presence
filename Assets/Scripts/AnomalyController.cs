@@ -1,3 +1,68 @@
+Ôªø/*using UnityEngine;
+using System.Collections.Generic;
+
+public class AnomalyController : MonoBehaviour
+{
+    public enum AnomalyType
+    {
+        ColorChange,
+        ScaleChange,
+        LightColorChange
+    }
+
+    public AnomalyType anomalyType;
+    public float transitionSpeed = 2f;
+    public float scaleMultiplier = 2f;
+    public Color targetColor = Color.red;
+
+    private bool isActive = false;
+    public bool IsActive => isActive;
+
+    private Dictionary<Transform, Vector3> originalScales;
+
+    void Start()
+    {
+        Debug.Log("‚ñ∂ [AnomalyController] START na objektu: " + gameObject.name);
+
+        originalScales = new Dictionary<Transform, Vector3>();
+
+        foreach (Transform t in GetComponentsInChildren<Transform>(true))
+        {
+            originalScales[t] = t.localScale;
+            Debug.Log("   ‚Üí Ulo≈æen scale childu: " + t.name + " scale = " + t.localScale);
+        }
+    }
+
+    public void Activate()
+    {
+        Debug.Log("‚ñ∂ [AnomalyController] Aktivov√°no: " + gameObject.name);
+        isActive = true;
+    }
+
+    void Update()
+    {
+        if (!isActive) return;
+
+        if (anomalyType == AnomalyType.ScaleChange)
+        {
+            Debug.Log("‚ü∂ SCALE tick na objektu: " + gameObject.name);
+
+            foreach (var kvp in originalScales)
+            {
+                Transform t = kvp.Key;
+                Vector3 orig = kvp.Value;
+                Vector3 target = orig * scaleMultiplier;
+
+                Debug.Log("   ‚Ä¢ Mƒõn√≠m scale: " + t.name +
+                          " z " + t.localScale + " ‚Üí " + target);
+
+                t.localScale = Vector3.Lerp(t.localScale, target, Time.deltaTime * 5f);
+            }
+        }
+    }
+}
+*/
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,9 +70,9 @@ public class AnomalyController : MonoBehaviour
 {
     public enum AnomalyType
     {
-        ColorChange,        // mÏnÌ barvu renderer˘ (mesh˘)
-        ScaleChange,        // mÏnÌ scale vöech child transform˘
-        LightColorChange    // mÏnÌ barvu vöech Light komponent
+        ColorChange,        // mƒõn√≠ barvu renderer≈Ø (mesh≈Ø)
+        ScaleChange,        // mƒõn√≠ scale v≈°ech child transform≈Ø
+        LightColorChange    // mƒõn√≠ barvu v≈°ech Light komponent
     }
 
     [Header("Type")]
@@ -29,16 +94,16 @@ public class AnomalyController : MonoBehaviour
     private Renderer[] renderers;
     private Color[] originalRendererColors;
 
-    // SvÏtla
+    // Svƒõtla
     private Light[] lights;
     private Color[] originalLightColors;
 
-    // Scale vöech transform˘ pod tÌmto objektem
+    // Scale v≈°ech transform≈Ø pod t√≠mto objektem
     private Dictionary<Transform, Vector3> originalScales;
 
     void Start()
     {
-        // Najdi vöechny rendery (koberec, potion, mesh v child objektu atd.)
+        // Najdi v≈°echny rendery (koberec, potion, mesh v child objektu atd.)
         renderers = GetComponentsInChildren<Renderer>(true);
         originalRendererColors = new Color[renderers.Length];
         for (int i = 0; i < renderers.Length; i++)
@@ -46,7 +111,7 @@ public class AnomalyController : MonoBehaviour
             originalRendererColors[i] = renderers[i].material.color;
         }
 
-        // Najdi vöechny Light komponenty (pokud je to anom·lie svÏtla)
+        // Najdi v≈°echny Light komponenty (pokud je to anom√°lie svƒõtla)
         lights = GetComponentsInChildren<Light>(true);
         originalLightColors = new Color[lights.Length];
         for (int i = 0; i < lights.Length; i++)
@@ -54,7 +119,7 @@ public class AnomalyController : MonoBehaviour
             originalLightColors[i] = lights[i].color;
         }
 
-        // UloûÌme p˘vodnÌ scale vöech Transform˘ pod tÌmto objektem
+        // Ulo≈æ√≠me p≈Øvodn√≠ scale v≈°ech Transform≈Ø pod t√≠mto objektem
         originalScales = new Dictionary<Transform, Vector3>();
         foreach (Transform t in GetComponentsInChildren<Transform>(true))
         {
@@ -100,10 +165,7 @@ public class AnomalyController : MonoBehaviour
         {
             Transform t = kvp.Key;
 
-            // Ignorujeme root objekt
-            if (t == transform)
-                continue;
-
+            // POVOLENO zvƒõt≈°it i root (t != transform podm√≠nka pryƒç)
             Vector3 original = kvp.Value;
 
             t.localScale = Vector3.Lerp(
@@ -131,18 +193,18 @@ public class AnomalyController : MonoBehaviour
         isActive = true;
     }
 
-    // Kdyby ses nÏkdy rozhodl anom·lie resetovat:
+    // Kdyby ses nƒõkdy rozhodl anom√°lie resetovat:
     public void ResetAnomaly()
     {
         isActive = false;
 
-        // barvy mesh˘
+        // barvy mesh≈Ø
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].material.color = originalRendererColors[i];
         }
 
-        // barvy svÏtel
+        // barvy svƒõtel
         for (int i = 0; i < lights.Length; i++)
         {
             lights[i].color = originalLightColors[i];
