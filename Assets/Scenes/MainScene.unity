@@ -535,7 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1023,6 +1023,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1977828675551396994, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: m_ClearFlags
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1977828675551396994, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: near clip plane
       value: 0.01
       objectReference: {fileID: 0}
@@ -1055,8 +1059,12 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5650760068109038476, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5650760068109038476, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: m_Cameras.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5650760068109038476, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -1117,13 +1125,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7992084312397127765, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
-      insertIndex: 1
+    - targetCorrespondingSourceObject: {fileID: 8514910791353846800, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1031202783}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3297694727869580020, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 306478938}
+    - targetCorrespondingSourceObject: {fileID: 3297694727869580020, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 306478944}
   m_SourcePrefab: {fileID: 100100000, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
 --- !u!1001 &183172896
 PrefabInstance:
@@ -1948,11 +1959,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   interactPrompt: {fileID: 85579511}
---- !u!4 &306478941 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7992084312397127765, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
-  m_PrefabInstance: {fileID: 166880979}
+--- !u!114 &306478944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306478934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381fd34e190709642b017b5f563c2f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  cameraModel: {fileID: 8164078559174725128}
+  cameraUI: {fileID: 1833786572}
+  flashGroup: {fileID: 448176647}
+  playerCamera: {fileID: 144582853}
+  defaultFOV: 60
+  aimedFOV: 30
+  aimSpeed: 5
+  flashDuration: 0.2
 --- !u!1001 &335474451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2336,7 +2362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2567,6 +2593,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7969972704443486089, guid: 3ef94e73d5607784fbcbba8de4155b1e, type: 3}
   m_PrefabInstance: {fileID: 490962930}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &492952497 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8514910791353846800, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+  m_PrefabInstance: {fileID: 166880979}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &495005064
 GameObject:
@@ -4247,37 +4278,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7432622557476287136, guid: cb9bc6b96d830b64293c9fdff99b1743, type: 3}
   m_PrefabInstance: {fileID: 784742168}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &788050657
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 788050658}
-  m_Layer: 0
-  m_Name: AimPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &788050658
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 788050657}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.5, y: 7.15, z: -4.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1151388027874975027}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795093355
 GameObject:
   m_ObjectHideFlags: 0
@@ -5269,7 +5269,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1031202783}
-  - component: {fileID: 1031202784}
   m_Layer: 0
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -5286,38 +5285,13 @@ Transform:
   m_GameObject: {fileID: 1031202782}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.425, y: 0.269, z: 0.671}
+  m_LocalPosition: {x: 0.42500013, y: -0.33099997, z: 0.6710001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1151388027874975027}
-  m_Father: {fileID: 306478941}
+  m_Father: {fileID: 492952497}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1031202784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1031202782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c636b8a0e0d2ab49a23576ef327377d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraController
-  playerCamera: {fileID: 144582853}
-  photoCamera: {fileID: 0}
-  cameraModel: {fileID: 0}
-  restPosition: {fileID: 0}
-  aimPosition: {fileID: 788050658}
-  photoUI: {fileID: 0}
-  flashEffect: {fileID: 448176647}
-  shutterSound: {fileID: 0}
-  moveSpeed: 12
-  rotationSpeed: 12
-  normalFOV: 60
-  zoomFOV: 35
-  fovSmoothSpeed: 8
 --- !u!1001 &1048861300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7039,7 +7013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1319196915
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7062,7 +7036,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -360, y: -200}
+  m_SizeDelta: {x: -360, y: -150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1319196916
 MonoBehaviour:
@@ -7078,7 +7052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.6039216}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8744,7 +8718,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 693.1063, y: 366.6619}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1770354701
 MonoBehaviour:
@@ -9100,7 +9074,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 800, y: 433.33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1833786574
 CanvasGroup:
@@ -10959,8 +10933,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.050000004, y: 0.05, z: 0.050000004}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 788050658}
+  m_Children: []
   m_Father: {fileID: 1031202783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1587545475662282989
@@ -11236,7 +11209,7 @@ GameObject:
   - component: {fileID: 2823090748130468985}
   - component: {fileID: 1587545475662282989}
   m_Layer: 0
-  m_Name: PhotoCameraModel
+  m_Name: CameraModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
