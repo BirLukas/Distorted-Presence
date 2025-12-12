@@ -1074,6 +1074,14 @@ PrefabInstance:
       propertyPath: 'm_Cameras.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6083509591996829933, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: jumpHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6083509591996829933, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: sprintSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6603319906406216757, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: mouseSensitivity
       value: 400
@@ -2479,7 +2487,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2407dd9d45ebb9b4a854b4ffbb6d22c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2407dd9d45ebb9b4a854b4ffbb6d22c1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7973,14 +7981,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1592769294}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.9668312, z: -0, w: 0.25541607}
-  m_LocalPosition: {x: -5.775, y: 0.953, z: 30.274}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.033290762, y: 0.7517521, z: 0.65796024, w: 0.029137254}
+  m_LocalPosition: {x: -5.651, y: 0.84, z: 30.442}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1691967558}
   m_Father: {fileID: 1103703166}
-  m_LocalEulerAnglesHint: {x: 0, y: -150.404, z: 0}
+  m_LocalEulerAnglesHint: {x: -80.861, y: 146.521, z: 33.817}
 --- !u!1001 &1593595100
 PrefabInstance:
   m_ObjectHideFlags: 0
