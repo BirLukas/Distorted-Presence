@@ -27,6 +27,25 @@ public class AnomalyManager : MonoBehaviour
             TriggerRandomAnomaly();
             ResetTimer();
         }
+
+        CheckUnreportedAnomalies();
+    }
+    void CheckUnreportedAnomalies()
+    {
+        if (SanityManager.Instance == null) return;
+
+        // Najdeme všechny aktivní anomálie, které hráè nefotil
+        var activeAnomalies = anomalies.FindAll(a => a.IsActive);
+
+        if (activeAnomalies.Count > 0)
+        {
+            // Použij metodu ze SanityManageru pro aplikování èasové penalizace
+            SanityManager.Instance.ApplyUnreportedPenalty(activeAnomalies.Count);
+
+            // Zde byste mohli nastavit i limit, napø. 'Pokud je aktivních 5 anomálií, HRA OKAMŽITÌ KONÈÍ'
+
+            Debug.Log($"Aktivních anomálií: {activeAnomalies.Count}. Sanity klesá.");
+        }
     }
 
     void ResetTimer()

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+
 public class CameraSystem : MonoBehaviour
 {
     [Header("Setup Objekty")]
@@ -17,18 +18,27 @@ public class CameraSystem : MonoBehaviour
     [Header("Nastavení Blesku")]
     public float flashDuration = 0.1f;  // Doba trvání bílého záblesku (v sekundách)
 
+    // Odkaz na skript, který provádí logiku focení (je na kameøe)
+    private PhotoCapture photoCapture;
+
     private bool isAimed = false;
     public static bool IsAimingGlobal { get; private set; }
-    private Vector3 defaultModelPosition;
-    private Quaternion defaultModelRotation;
 
     void Start()
     {
-        // Uložení výchozí pozice a rotace 3D modelu kamery na zaèátku hry
-        if (cameraModel != null)
+        // Kontrola, zda máme referenci na hlavní kameru
+        if (playerCamera == null)
         {
-            defaultModelPosition = cameraModel.transform.localPosition;
-            defaultModelRotation = cameraModel.transform.localRotation;
+            Debug.LogError("Chyba: Player Camera není pøiøazena v Inspectoru CameraSystem!");
+            return;
+        }
+
+        // Najdeme PhotoCapture skript na objektu kamery
+        photoCapture = playerCamera.GetComponent<PhotoCapture>();
+
+        if (photoCapture == null)
+        {
+            Debug.LogError("Chyba! Skript PhotoCapture nebyl nalezen na Player Camera.");
         }
 
         // Skrytí UI hledáèku a nastavení blesku na prùhledný stav pøi startu
@@ -36,7 +46,7 @@ public class CameraSystem : MonoBehaviour
         if (flashGroup != null) flashGroup.alpha = 0f;
 
         // Ujistìte se, že kamera má správné výchozí FOV
-        if (playerCamera != null) playerCamera.fieldOfView = defaultFOV;
+        playerCamera.fieldOfView = defaultFOV;
     }
 
     void Update()
@@ -68,37 +78,35 @@ public class CameraSystem : MonoBehaviour
     {
         isAimed = true;
 
-        // Zde by normálnì probíhala animace pøesunu modelu pøed oblièej.
-        // Pro tuto implementaci pouze pøepínáme viditelnost UI a model schováváme.
-
         if (cameraModel != null) cameraModel.SetActive(false);
         if (cameraUI != null) cameraUI.SetActive(true);
     }
 
-    /// <summary>
-    /// Logika pro návrat do normálního stavu.
-    /// </summary>
     void StopAiming()
     {
         isAimed = false;
 
-        // Zobrazíme model zpìt v ruce a skryjeme UI hledáèku.
         if (cameraModel != null) cameraModel.SetActive(true);
         if (cameraUI != null) cameraUI.SetActive(false);
     }
 
     /// <summary>
-    /// Akce focení.
+    /// Akce focení, spouští logiku detekce a vizuální blesk.
     /// </summary>
     void TakePhoto()
     {
-        Debug.Log("Fotíme! Blesk aktivován.");
+        if (photoCapture != null)
+        {
+            // Vizuální efekt blesku (Coroutine v CameraSystem)
+            StartCoroutine(FlashEffect());
 
-        // Spustíme coroutine, která se postará o efekt blesku
-        StartCoroutine(FlashEffect());
-
-        // Zde je místo pro skuteènou logiku ukládání screenshotu na disk, napø:
-        // ScreenCapture.CaptureScreenshot("MojeFotka_" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png");
+            // Logika snímání anomálie, munice a Sanity (Metoda v PhotoCapture)
+            photoCapture.TryCaptureAnomaly();
+        }
+        else
+        {
+            Debug.LogError("Nelze fotit: Skript PhotoCapture není pøipojen.");
+        }
     }
 
     /// <summary>

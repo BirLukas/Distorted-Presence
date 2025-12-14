@@ -1143,6 +1143,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3297694727869580020, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 306478944}
+    - targetCorrespondingSourceObject: {fileID: 2244505983282437211, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1020365934}
   m_SourcePrefab: {fileID: 100100000, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
 --- !u!1001 &183172896
 PrefabInstance:
@@ -2960,6 +2963,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 795093356}
     m_Modifications:
+    - target: {fileID: 2922107562325671188, guid: 55320ad6284175349b1008aaf7238c7a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2922107562325671189, guid: 55320ad6284175349b1008aaf7238c7a, type: 3}
       propertyPath: m_Lightmapping
       value: 2
@@ -4385,6 +4392,56 @@ Transform:
   - {fileID: 1642977198}
   m_Father: {fileID: 1103703166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &796528453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 796528455}
+  - component: {fileID: 796528454}
+  m_Layer: 0
+  m_Name: SanityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &796528454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796528453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1845cab6d79c9a648990dfa7f2daa98d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SanityManager
+  correctAnomalyBonus: 5
+  incorrectAnomalyPenalty: 10
+  unreportedAnomalyPenalty: 1
+  OnSanityZero:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &796528455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796528453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.44461, y: 0.75891, z: 30.01415}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &833005933 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 311105157400801882, guid: 96682f590594eac4d85882121f3d9d9d, type: 3}
@@ -5232,6 +5289,29 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 490335350711628747, guid: 0a7f51b5f4ba6294a889f661114da0d3, type: 3}
   m_PrefabInstance: {fileID: 1015585011}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1020365933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2244505983282437211, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+  m_PrefabInstance: {fileID: 166880979}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1020365934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020365933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db145e821ba600244aab40d2631be16f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhotoCapture
+  raycastDistance: 15
+  anomalyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  maxFilmCount: 10
+  cameraShutterSound: {fileID: 0}
 --- !u!4 &1023862991 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 597135567908895808, guid: ad4bcbbca7d5fde4cbaa62e8f9296dd9, type: 3}
@@ -5957,6 +6037,10 @@ PrefabInstance:
     - target: {fileID: 4179086729700039233, guid: ce285a7430946e24ca0a9218777a7805, type: 3}
       propertyPath: m_Name
       value: Table_Small
+      objectReference: {fileID: 0}
+    - target: {fileID: 4179086729700039233, guid: ce285a7430946e24ca0a9218777a7805, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4179086729700329057, guid: ce285a7430946e24ca0a9218777a7805, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7219,6 +7303,10 @@ PrefabInstance:
       value: Stool_round
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 2fecc0ac19ff3de449e712fce3335198, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 2fecc0ac19ff3de449e712fce3335198, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -7950,13 +8038,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1592769296}
   - component: {fileID: 1592769295}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VinylRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1592769295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9125,8 +9213,8 @@ MonoBehaviour:
   - {fileID: 1592769295}
   - {fileID: 1477677103}
   - {fileID: 1642977199}
-  minDelay: 3
-  maxDelay: 5
+  minDelay: 6
+  maxDelay: 8
 --- !u!4 &1811618169
 Transform:
   m_ObjectHideFlags: 0
@@ -10126,6 +10214,10 @@ PrefabInstance:
     - target: {fileID: 216915012680525562, guid: ad4bcbbca7d5fde4cbaa62e8f9296dd9, type: 3}
       propertyPath: m_Name
       value: Banner
+      objectReference: {fileID: 0}
+    - target: {fileID: 216915012680525562, guid: ad4bcbbca7d5fde4cbaa62e8f9296dd9, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 597135567908895808, guid: ad4bcbbca7d5fde4cbaa62e8f9296dd9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11299,7 +11391,7 @@ GameObject:
   - component: {fileID: 5786272362538772359}
   - component: {fileID: 324539209901988148}
   - component: {fileID: 1879194043}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Carpet_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11334,7 +11426,7 @@ GameObject:
   - component: {fileID: 7516147022334914906}
   - component: {fileID: 7516147022332915611}
   - component: {fileID: 949051103}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Potion_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11465,3 +11557,4 @@ SceneRoots:
   - {fileID: 600361845}
   - {fileID: 461771392}
   - {fileID: 1811618169}
+  - {fileID: 796528455}
