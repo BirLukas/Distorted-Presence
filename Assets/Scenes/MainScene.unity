@@ -9213,8 +9213,8 @@ MonoBehaviour:
   - {fileID: 1592769295}
   - {fileID: 1477677103}
   - {fileID: 1642977199}
-  minDelay: 6
-  maxDelay: 8
+  minDelay: 10
+  maxDelay: 20
 --- !u!4 &1811618169
 Transform:
   m_ObjectHideFlags: 0

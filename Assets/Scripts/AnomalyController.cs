@@ -5,11 +5,11 @@ public class AnomalyController : MonoBehaviour
 {
     public enum AnomalyType
     {
-        ColorChange,         // mění barvu rendererů (meshů)
-        ScaleChange,        // mění scale všech child transformů
-        LightColorChange,   // mění barvu všech Light komponent
-        MissingObject,      // Chybějící objekt
-        AddedObject         // Přidaný objekt
+        ColorChange,
+        ScaleChange,
+        LightColorChange,
+        MissingObject,
+        AddedObject
     }
 
     [Header("Type")]
@@ -27,7 +27,7 @@ public class AnomalyController : MonoBehaviour
     private bool isActive = false;
     public bool IsActive => isActive;
 
-    // Renderery (mesh)
+    // Renderery
     private Renderer[] renderers;
     private Color[] originalRendererColors;
 
@@ -40,7 +40,6 @@ public class AnomalyController : MonoBehaviour
 
     void Start()
     {
-        // Najdi všechny rendery (koberec, potion, mesh v child objektu atd.)
         renderers = GetComponentsInChildren<Renderer>(true);
         originalRendererColors = new Color[renderers.Length];
         for (int i = 0; i < renderers.Length; i++)
@@ -48,7 +47,6 @@ public class AnomalyController : MonoBehaviour
             originalRendererColors[i] = renderers[i].material.color;
         }
 
-        // Najdi všechny Light komponenty (pokud je to anomálie světla)
         lights = GetComponentsInChildren<Light>(true);
         originalLightColors = new Color[lights.Length];
         for (int i = 0; i < lights.Length; i++)
@@ -56,7 +54,6 @@ public class AnomalyController : MonoBehaviour
             originalLightColors[i] = lights[i].color;
         }
 
-        // Uložíme původní scale všech Transformů pod tímto objektem
         originalScales = new Dictionary<Transform, Vector3>();
         foreach (Transform t in GetComponentsInChildren<Transform>(true))
         {
@@ -102,7 +99,6 @@ public class AnomalyController : MonoBehaviour
         {
             Transform t = kvp.Key;
 
-            // POVOLENO zvětšit i root (t != transform podmínka pryč)
             Vector3 original = kvp.Value;
 
             t.localScale = Vector3.Lerp(
@@ -131,12 +127,10 @@ public class AnomalyController : MonoBehaviour
 
         if (anomalyType == AnomalyType.MissingObject)
         {
-            // Objekt zmizí
             gameObject.SetActive(false);
         }
         else if (anomalyType == AnomalyType.AddedObject)
         {
-            // Objekt se objeví
             gameObject.SetActive(true);
         }
     }
@@ -164,14 +158,10 @@ public class AnomalyController : MonoBehaviour
 
         if (anomalyType == AnomalyType.MissingObject || anomalyType == AnomalyType.AddedObject)
         {
-            // Objekt se buď vrátí (MissingObject) nebo se deaktivuje pro další den (AddedObject)
-            // U MissingObject: objekt musí být na scéně aktivní (True)
-            // U AddedObject: objekt, který je na začátku neaktivní, zůstane neaktivní (False)
             gameObject.SetActive(anomalyType != AnomalyType.AddedObject);
         }
         else
         {
-            // Pro standardní anomálie (Color/Scale/Light) je objekt vždy aktivní
             gameObject.SetActive(true);
         }
     }
