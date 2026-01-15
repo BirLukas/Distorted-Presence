@@ -89,29 +89,29 @@ public class CameraSystem : MonoBehaviour
         if (cameraModel != null) cameraModel.SetActive(true);
         if (cameraUI != null) cameraUI.SetActive(false);
     }
-
-    /// <summary>
-    /// Akce focení, spouští logiku detekce a vizuální blesk.
-    /// </summary>
     void TakePhoto()
     {
         if (photoCapture != null)
         {
-            // Vizuální efekt blesku (Coroutine v CameraSystem)
-            StartCoroutine(FlashEffect());
+            // Kontrola, zda má hráè ještì film, než se spustí vizuální efekty
+            if (photoCapture.GetRemainingFilmCount() > 0)
+            {
+                // Vizuální efekt blesku se spustí jen pokud je èím fotit
+                StartCoroutine(FlashEffect());
 
-            // Logika snímání anomálie, munice a Sanity (Metoda v PhotoCapture)
-            photoCapture.TryCaptureAnomaly();
+                // Logika snímání (v této metodì se odeète film)
+                photoCapture.TryCaptureAnomaly();
+            }
+            else
+            {
+                Debug.Log("Nelze vyvolat blesk: Došel film.");
+            }
         }
         else
         {
             Debug.LogError("Nelze fotit: Skript PhotoCapture není pøipojen.");
         }
     }
-
-    /// <summary>
-    /// Coroutine, která na krátkou dobu rozsvítí a zhasne bílý panel (blesk).
-    /// </summary>
     IEnumerator FlashEffect()
     {
         // 1. Okamžitì zviditelnit blesk (plná alfa, viditelné)

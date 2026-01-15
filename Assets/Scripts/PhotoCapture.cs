@@ -1,14 +1,17 @@
 using UnityEngine;
-
+using TMPro;
 public class PhotoCapture : MonoBehaviour
 {
     [Header("Capture Settings")]
     public float raycastDistance = 15f;
     public LayerMask anomalyLayer;
 
-    [Header("Ammo Settings (Leden)")]
+    [Header("Ammo Settings")]
     public int maxFilmCount = 10;
     private int currentFilmCount;
+
+    [Header("UI Settings")]
+    public TextMeshProUGUI filmCountText;
 
     [Header("Camera Effect Settings")]
     public AudioSource cameraShutterSound;
@@ -22,7 +25,6 @@ public class PhotoCapture : MonoBehaviour
     {
         if (currentFilmCount <= 0)
         {
-            Debug.Log("Došly snímky! Už nemùžeš fotit.");
             return;
         }
 
@@ -95,6 +97,15 @@ public class PhotoCapture : MonoBehaviour
 
     private void UpdateFilmUI()
     {
-        Debug.Log($"Zbývá snímkù: {currentFilmCount} / {maxFilmCount}");
+        filmCountText.text = currentFilmCount.ToString();
+
+        if (currentFilmCount <= 0)
+        {
+            filmCountText.color = Color.red;
+        }
+        else
+        {
+            filmCountText.color = Color.green;
+        }
     }
 }
