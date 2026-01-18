@@ -86,13 +86,13 @@ public class PhotoCapture : MonoBehaviour
 
             anomaly.ReportAnomaly();
 
-            Debug.Log($"Anomálie {anomaly.gameObject.name} nahlášena. Sanity + {SanityManager.Instance.correctAnomalyBonus}%");
+            Debug.Log($"Anomaly {anomaly.gameObject.name} reported. Sanity + {SanityManager.Instance.correctAnomalyBonus}%");
         }
         else
         {
             ApplyIncorrectCapturePenalty();
 
-            Debug.LogWarning($"Špatná fotka! Objekt {anomaly.gameObject.name} není anomálie.");
+            Debug.LogWarning($"Wrong picture! Object {anomaly.gameObject.name} is not an anomaly.");
         }
     }
 
@@ -101,7 +101,7 @@ public class PhotoCapture : MonoBehaviour
         if (SanityManager.Instance != null)
         {
             SanityManager.Instance.RemoveSanity(SanityManager.Instance.incorrectAnomalyPenalty);
-            Debug.Log($"Špatná fotka. Sanity - {SanityManager.Instance.incorrectAnomalyPenalty}%");
+            Debug.Log($"Wrong Picture. Sanity - {SanityManager.Instance.incorrectAnomalyPenalty}%");
         }
     }
 

@@ -47,7 +47,7 @@ public class AnomalyManager : MonoBehaviour
         if (activeAnomalies.Count > 0)
         {
             SanityManager.Instance.ApplyUnreportedPenalty(activeAnomalies.Count);
-            Debug.Log($"Aktivních anomálií: {activeAnomalies.Count}. Sanity klesá.");
+            Debug.Log($"Active anomalies: {activeAnomalies.Count}. Sanity is decreasing.");
         }
     }
 
@@ -62,7 +62,6 @@ public class AnomalyManager : MonoBehaviour
 
         if (inactive.Count == 0)
         {
-            Debug.Log("All anomalies are active.");
             return;
         }
 
