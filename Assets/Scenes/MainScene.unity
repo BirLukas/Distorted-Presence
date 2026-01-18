@@ -4923,7 +4923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SanityManager
   correctAnomalyBonus: 5
-  incorrectAnomalyPenalty: 10
+  incorrectAnomalyPenalty: 100
   unreportedAnomalyPenalty: 0
   OnSanityZero:
     m_PersistentCalls:
