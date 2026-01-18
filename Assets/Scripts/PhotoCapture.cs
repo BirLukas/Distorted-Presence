@@ -12,6 +12,7 @@ public class PhotoCapture : MonoBehaviour
 
     [Header("UI Settings")]
     public TextMeshProUGUI filmCountText;
+    public GameObject noFilmWarningUI;
 
     [Header("Camera Effect Settings")]
     public AudioSource cameraShutterSound;
@@ -20,11 +21,17 @@ public class PhotoCapture : MonoBehaviour
     {
         currentFilmCount = maxFilmCount;
         UpdateFilmUI();
+
+        if (noFilmWarningUI != null)
+        {
+            noFilmWarningUI.SetActive(false);
+        }
     }
     public void TryCaptureAnomaly()
     {
         if (currentFilmCount <= 0)
         {
+            ShowNoFilmWarning();
             return;
         }
 
@@ -40,7 +47,7 @@ public class PhotoCapture : MonoBehaviour
         {
             AnomalyController anomaly = hit.collider.GetComponentInParent<AnomalyController>();
 
-            if (anomaly != null)
+            if (anomaly != null && anomaly.IsActive)
             {
                 ProcessAnomalyCapture(anomaly);
             }
@@ -54,6 +61,20 @@ public class PhotoCapture : MonoBehaviour
             ApplyIncorrectCapturePenalty();
         }
     }
+    private void ShowNoFilmWarning()
+    {
+        if (noFilmWarningUI != null)
+        {
+            noFilmWarningUI.SetActive(true);
+            CancelInvoke("HideNoFilmWarning");
+            Invoke("HideNoFilmWarning", 2f);
+        }
+    }
+
+    private void HideNoFilmWarning()
+    {
+        if (noFilmWarningUI != null) noFilmWarningUI.SetActive(false);
+    }
 
     private void ProcessAnomalyCapture(AnomalyController anomaly)
     {
@@ -63,7 +84,7 @@ public class PhotoCapture : MonoBehaviour
         {
             SanityManager.Instance.AddSanity(SanityManager.Instance.correctAnomalyBonus);
 
-            anomaly.ResetAnomaly();
+            anomaly.ReportAnomaly();
 
             Debug.Log($"Anomálie {anomaly.gameObject.name} nahlášena. Sanity + {SanityManager.Instance.correctAnomalyBonus}%");
         }

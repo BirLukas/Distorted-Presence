@@ -27,15 +27,15 @@ public class AnomalyController : MonoBehaviour
     private bool isActive = false;
     public bool IsActive => isActive;
 
-    // Renderery
+    private bool wasReported = false;
+    public bool WasReported => wasReported;
+
     private Renderer[] renderers;
     private Color[] originalRendererColors;
 
-    // Světla
     private Light[] lights;
     private Color[] originalLightColors;
 
-    // Scale všech transformů pod tímto objektem
     private Dictionary<Transform, Vector3> originalScales;
 
     void Start()
@@ -120,49 +120,72 @@ public class AnomalyController : MonoBehaviour
             );
         }
     }
+    public void ReportAnomaly()
+    {
+        isActive = false;
+        wasReported = true;
+    }
 
     public void Activate()
     {
         isActive = true;
 
+        if (renderers == null) renderers = GetComponentsInChildren<Renderer>(true);
+        if (lights == null) lights = GetComponentsInChildren<Light>(true);
+
         if (anomalyType == AnomalyType.MissingObject)
         {
-            gameObject.SetActive(false);
+            foreach (Renderer r in renderers)
+            {
+                if (r != null) r.enabled = false;
+            }
+            foreach (Light l in lights)
+            {
+                if (l != null) l.enabled = false;
+            }
         }
         else if (anomalyType == AnomalyType.AddedObject)
         {
             gameObject.SetActive(true);
+            foreach (Renderer r in renderers)
+            {
+                if (r != null) r.enabled = true;
+            }
+            foreach (Light l in lights)
+            {
+                if (l != null) l.enabled = true;
+            }
         }
     }
     public void ResetAnomaly()
     {
         isActive = false;
 
-        // barvy meshů
+        foreach (Renderer r in renderers) r.enabled = true;
+        foreach (Light l in lights) l.enabled = true;
+
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].material.color = originalRendererColors[i];
         }
 
-        // barvy světel
         for (int i = 0; i < lights.Length; i++)
         {
             lights[i].color = originalLightColors[i];
         }
 
-        // scale
         foreach (var kvp in originalScales)
         {
-            kvp.Key.localScale = kvp.Value;
+            if (kvp.Key != null) kvp.Key.localScale = kvp.Value;
         }
 
-        if (anomalyType == AnomalyType.MissingObject || anomalyType == AnomalyType.AddedObject)
-        {
-            gameObject.SetActive(anomalyType != AnomalyType.AddedObject);
-        }
-        else
+        if (anomalyType == AnomalyType.MissingObject)
         {
             gameObject.SetActive(true);
+        }
+        else if (anomalyType == AnomalyType.AddedObject)
+        {
+            gameObject.SetActive(false);
         }
     }
 }

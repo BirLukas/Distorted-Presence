@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class AnomalyManager : MonoBehaviour
 {
+    public static AnomalyManager Instance { get; private set; }
     public List<AnomalyController> anomalies = new List<AnomalyController>();
 
     public float minDelay = 10f;
@@ -11,6 +12,7 @@ public class AnomalyManager : MonoBehaviour
     private float timer;
     private bool running = true;
 
+    private void Awake() => Instance = this;
     void Start()
     {
         ResetTimer();
@@ -18,6 +20,12 @@ public class AnomalyManager : MonoBehaviour
 
     void Update()
     {
+        if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver)
+        {
+            running = false;
+            return;
+        }
+
         if (!running) return;
 
         timer -= Time.deltaTime;
@@ -34,16 +42,11 @@ public class AnomalyManager : MonoBehaviour
     {
         if (SanityManager.Instance == null) return;
 
-        // Najdeme všechny aktivní anomálie, které hráè nefotil
         var activeAnomalies = anomalies.FindAll(a => a.IsActive);
 
         if (activeAnomalies.Count > 0)
         {
-            // Použij metodu ze SanityManageru pro aplikování èasové penalizace
             SanityManager.Instance.ApplyUnreportedPenalty(activeAnomalies.Count);
-
-            // Zde byste mohli nastavit i limit, napø. 'Pokud je aktivních 5 anomálií, HRA OKAMŽITÌ KONÈÍ'
-
             Debug.Log($"Aktivních anomálií: {activeAnomalies.Count}. Sanity klesá.");
         }
     }
@@ -55,12 +58,11 @@ public class AnomalyManager : MonoBehaviour
 
     void TriggerRandomAnomaly()
     {
-        var inactive = anomalies.FindAll(a => !a.IsActive);
+        var inactive = anomalies.FindAll(a => !a.IsActive && !a.WasReported);
 
         if (inactive.Count == 0)
         {
             Debug.Log("All anomalies are active.");
-            running = false;
             return;
         }
 

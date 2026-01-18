@@ -104,7 +104,7 @@ public class CameraSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Nelze vyvolat blesk: Došel film.");
+                photoCapture.TryCaptureAnomaly();
             }
         }
         else
