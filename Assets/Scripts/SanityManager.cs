@@ -62,7 +62,6 @@ public class SanityManager : MonoBehaviour
             currentSanity = 0f;
             isGameOver = true;
             OnSanityZero.Invoke();
-            Debug.Log("SANITY 0% - HRA KON»Õ!");
         }
     }
     public void Victory()
@@ -70,7 +69,6 @@ public class SanityManager : MonoBehaviour
         if (isGameOver) return;
         isGameOver = true;
         OnVictory.Invoke();
-        Debug.Log("VÕTÃZSTVÕ! HRA KON»Õ!");
     }
 
     public void ResetSanity(float initialValue = 100f)
