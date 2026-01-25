@@ -61,6 +61,7 @@ public class SanityManager : MonoBehaviour
         {
             currentSanity = 0f;
             isGameOver = true;
+            StopGame();
             OnSanityZero.Invoke();
         }
     }
@@ -68,12 +69,20 @@ public class SanityManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
+        StopGame();
         OnVictory.Invoke();
+    }
+    private void StopGame()
+    {
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void ResetSanity(float initialValue = 100f)
     {
         currentSanity = initialValue;
         isGameOver = false;
+        Time.timeScale = 1f;
     }
 }
