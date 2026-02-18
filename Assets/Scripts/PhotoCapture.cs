@@ -15,7 +15,9 @@ public class PhotoCapture : MonoBehaviour
     public GameObject noFilmWarningUI;
 
     [Header("Camera Effect Settings")]
-    public AudioSource cameraShutterSound;
+    public AudioSource AudioSource;
+    public AudioClip ShutterSound;
+
 
     void Start()
     {
@@ -38,9 +40,9 @@ public class PhotoCapture : MonoBehaviour
         currentFilmCount--;
         UpdateFilmUI();
 
-        if (cameraShutterSound != null)
+        if (AudioSource != null && ShutterSound != null)
         {
-            cameraShutterSound.Play();
+            AudioSource.PlayOneShot(ShutterSound);
         }
 
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, raycastDistance, anomalyLayer))
