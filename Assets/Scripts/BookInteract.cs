@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using System;
 
 public class BookInteract : MonoBehaviour
@@ -24,9 +25,7 @@ public class BookInteract : MonoBehaviour
     public bool HasBeenReadOnce => hasBeenRead;
 
     private MouseLook mouseLook;
-
     public static bool IsUIOpen = false;
-
 
     void Start()
     {
@@ -39,12 +38,19 @@ public class BookInteract : MonoBehaviour
         mouseLook = FindFirstObjectByType<MouseLook>();
     }
 
+    public void OnInteract(InputValue value)
+    {
+        if (value.isPressed && isReading)
+        {
+            CloseBook();
+        }
+    }
+
     public void OpenBook()
     {
-        IsUIOpen = true;
-
         if (isReading) return;
 
+        IsUIOpen = true;
         isReading = true;
         readPanel.SetActive(true);
         ShowPage(0);
@@ -54,7 +60,7 @@ public class BookInteract : MonoBehaviour
             hasBeenRead = true;
     }
 
-    private void CloseBook()
+    public void CloseBook()
     {
         IsUIOpen = false;
         isReading = false;
@@ -78,13 +84,22 @@ public class BookInteract : MonoBehaviour
     private void LockPlayer(bool locked)
     {
         var movement = FindFirstObjectByType<PlayerMovement>();
+
         if (movement != null)
             movement.enabled = !locked;
 
         if (mouseLook != null)
             mouseLook.enabled = !locked;
 
-        Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = locked;
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }

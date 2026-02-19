@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerInteract : MonoBehaviour
 
     private Camera cam;
     private BookInteract focusedBook;
+    private Door focusedDoor;
 
     void Start()
     {
@@ -17,18 +19,27 @@ public class PlayerInteract : MonoBehaviour
             interactPrompt.gameObject.SetActive(false);
     }
 
+    public void OnInteract(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            if (focusedBook != null)
+            {
+                focusedBook.OpenBook();
+            }
+            else if (focusedDoor != null && !focusedDoor.isLocked)
+            {
+                focusedDoor.ToggleDoor();
+            }
+        }
+    }
+
     void Update()
     {
+        focusedBook = null;
+        focusedDoor = null;
+
         if (BookInteract.IsUIOpen || CameraSystem.IsAimingGlobal)
-        {
-            if (interactPrompt != null && interactPrompt.gameObject.activeSelf)
-                interactPrompt.gameObject.SetActive(false);
-
-            return;
-        }
-
-
-        if (focusedBook != null && focusedBook.IsReading)
         {
             if (interactPrompt != null && interactPrompt.gameObject.activeSelf)
                 interactPrompt.gameObject.SetActive(false);
@@ -42,45 +53,33 @@ public class PlayerInteract : MonoBehaviour
             if (book != null)
             {
                 focusedBook = book;
-
-                if (interactPrompt != null && !interactPrompt.gameObject.activeSelf)
+                if (interactPrompt != null)
                 {
                     interactPrompt.text = "[E] Read";
                     interactPrompt.gameObject.SetActive(true);
                 }
-
-                if (Input.GetKeyDown(KeyCode.E))
-                    book.OpenBook();
-
                 return;
             }
 
             Door door = hit.collider.GetComponentInParent<Door>();
             if (door != null)
             {
-                if (door.isLocked)
+                focusedDoor = door;
+                if (interactPrompt != null)
                 {
-                    if (!interactPrompt.gameObject.activeSelf)
+                    if (door.isLocked)
                     {
                         interactPrompt.text = "You need to read the book first";
-                        interactPrompt.gameObject.SetActive(true);
                     }
-
-                    return;
+                    else
+                    {
+                        interactPrompt.text = door.isOpen ? "[E] Close" : "[E] Open";
+                    }
+                    interactPrompt.gameObject.SetActive(true);
                 }
-
-                interactPrompt.text = door.isOpen ? "[E] Close" : "[E] Open";
-                interactPrompt.gameObject.SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.E))
-                    door.ToggleDoor();
-
                 return;
             }
-
         }
-
-        focusedBook = null;
         if (interactPrompt != null && interactPrompt.gameObject.activeSelf)
             interactPrompt.gameObject.SetActive(false);
     }

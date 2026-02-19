@@ -1,91 +1,75 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.InputSystem; // Nutné pro nový Input System
 
 public class CameraSystem : MonoBehaviour
 {
     [Header("Setup Objekty")]
-    public GameObject cameraModel;      // 3D model kamery v ruce
-    public GameObject cameraUI;         // Objekt UI s rámeèkem/møížkou hledáèku (Canvas Panel)
-    public CanvasGroup flashGroup;      // CanvasGroup na objektu "Flash" pro ovládání prùhlednosti
-    public Camera playerCamera;         // Hlavní kamera hráèe (FPS pohled)
+    public GameObject cameraModel;
+    public GameObject cameraUI;
+    public CanvasGroup flashGroup;
+    public Camera playerCamera;
 
     [Header("Nastavení Pohledu a Zoomu")]
-    public float defaultFOV = 60f;      // Výchozí FOV pøi bìžném pohybu
-    public float aimedFOV = 30f;        // FOV pøi zamíøení (zoom)
-    public float aimSpeed = 5f;         // Rychlost plynulého pøechodu mezi FOV
+    public float defaultFOV = 60f;
+    public float aimedFOV = 30f;
+    public float aimSpeed = 5f;
 
     [Header("Nastavení Blesku")]
-    public float flashDuration = 0.1f;  // Doba trvání bílého záblesku (v sekundách)
+    public float flashDuration = 0.1f;
 
-    // Odkaz na skript, který provádí logiku focení (je na kameøe)
     private PhotoCapture photoCapture;
-
     private bool isAimed = false;
     public static bool IsAimingGlobal { get; private set; }
 
     void Start()
     {
-        // Kontrola, zda máme referenci na hlavní kameru
         if (playerCamera == null)
         {
-            Debug.LogError("Chyba: Player Camera není pøiøazena v Inspectoru CameraSystem!");
+            Debug.LogError("Chyba: Player Camera není pøiøazena!");
             return;
         }
 
-        // Najdeme PhotoCapture skript na objektu kamery
         photoCapture = playerCamera.GetComponent<PhotoCapture>();
 
-        if (photoCapture == null)
-        {
-            Debug.LogError("Chyba! Skript PhotoCapture nebyl nalezen na Player Camera.");
-        }
-
-        // Skrytí UI hledáèku a nastavení blesku na prùhledný stav pøi startu
         if (cameraUI != null) cameraUI.SetActive(false);
         if (flashGroup != null) flashGroup.alpha = 0f;
 
-        // Ujistìte se, že kamera má správné výchozí FOV
         playerCamera.fieldOfView = defaultFOV;
     }
-
-    void Update()
+    // Zavolá se, když stiskneš/pustíš pravé tlaèítko (akce "Aim")
+    public void OnAim(InputValue value)
     {
-        // Detekce podržení pravého tlaèítka myši pro zamíøení
-        if (Input.GetMouseButton(1))
-        {
-            AimCamera();
-        }
-        else
-        {
-            StopAiming();
-        }
+        isAimed = value.isPressed;
 
-        // Pokud je aktivnì zamìøeno, levé tlaèítko myši fotí
-        if (isAimed && Input.GetMouseButtonDown(0))
+        if (isAimed) AimCamera();
+        else StopAiming();
+    }
+    // Zavolá se, když klikneš levým tlaèítkem (akce "Fire")
+    public void OnFire(InputValue value)
+    {
+        // Fotíme jen pokud hráè právì kliknul (isPressed) a zároveò míøí
+        if (value.isPressed && isAimed)
         {
             TakePhoto();
         }
-
-        // Plynulý pøechod mezi FOV pro efekt zoomu/oddálení
+    }
+    void Update()
+    {
+        // Plynulý zoom øešíme stále v Update pomocí Lerp
         float targetFOV = isAimed ? aimedFOV : defaultFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * aimSpeed);
 
         IsAimingGlobal = isAimed;
     }
-
     void AimCamera()
     {
-        isAimed = true;
-
         if (cameraModel != null) cameraModel.SetActive(false);
         if (cameraUI != null) cameraUI.SetActive(true);
     }
-
     void StopAiming()
     {
-        isAimed = false;
-
         if (cameraModel != null) cameraModel.SetActive(true);
         if (cameraUI != null) cameraUI.SetActive(false);
     }
@@ -93,34 +77,17 @@ public class CameraSystem : MonoBehaviour
     {
         if (photoCapture != null)
         {
-            // Kontrola, zda má hráè ještì film, než se spustí vizuální efekty
             if (photoCapture.GetRemainingFilmCount() > 0)
             {
-                // Vizuální efekt blesku se spustí jen pokud je èím fotit
                 StartCoroutine(FlashEffect());
-
-                // Logika snímání (v této metodì se odeète film)
-                photoCapture.TryCaptureAnomaly();
             }
-            else
-            {
-                photoCapture.TryCaptureAnomaly();
-            }
-        }
-        else
-        {
-            Debug.LogError("Nelze fotit: Skript PhotoCapture není pøipojen.");
+            photoCapture.TryCaptureAnomaly();
         }
     }
     IEnumerator FlashEffect()
     {
-        // 1. Okamžitì zviditelnit blesk (plná alfa, viditelné)
         if (flashGroup != null) flashGroup.alpha = 1f;
-
-        // 2. Poèkat po definovanou dobu trvání blesku
         yield return new WaitForSeconds(flashDuration);
-
-        // 3. Okamžitì zneviditelnit blesk (nulová alfa, prùhledné)
         if (flashGroup != null) flashGroup.alpha = 0f;
     }
 }
