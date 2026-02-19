@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.InputSystem; // Nutné pro nový Input System
+using UnityEngine.InputSystem;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -38,7 +38,6 @@ public class CameraSystem : MonoBehaviour
 
         playerCamera.fieldOfView = defaultFOV;
     }
-    // Zavolá se, když stiskneš/pustíš pravé tlaèítko (akce "Aim")
     public void OnAim(InputValue value)
     {
         isAimed = value.isPressed;
@@ -46,10 +45,8 @@ public class CameraSystem : MonoBehaviour
         if (isAimed) AimCamera();
         else StopAiming();
     }
-    // Zavolá se, když klikneš levým tlaèítkem (akce "Fire")
     public void OnFire(InputValue value)
     {
-        // Fotíme jen pokud hráè právì kliknul (isPressed) a zároveò míøí
         if (value.isPressed && isAimed)
         {
             TakePhoto();
@@ -57,7 +54,6 @@ public class CameraSystem : MonoBehaviour
     }
     void Update()
     {
-        // Plynulý zoom øešíme stále v Update pomocí Lerp
         float targetFOV = isAimed ? aimedFOV : defaultFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * aimSpeed);
 
