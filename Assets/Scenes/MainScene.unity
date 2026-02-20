@@ -2814,6 +2814,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   interactPrompt: {fileID: 85579511}
+  requiredHoldTime: 2
 --- !u!114 &306478944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4077,6 +4078,9 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 2.5
   isOpen: 0
+  canEndDayAfterUnlock: 0
+  endDayDelay: 120
+  canEndDay: 0
   isLocked: 0
 --- !u!1001 &497491742
 PrefabInstance:
@@ -5172,6 +5176,9 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 2.5
   isOpen: 0
+  canEndDayAfterUnlock: 0
+  endDayDelay: 120
+  canEndDay: 0
   isLocked: 0
 --- !u!1 &609932726 stripped
 GameObject:
@@ -10506,6 +10513,9 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 2.5
   isOpen: 0
+  canEndDayAfterUnlock: 0
+  endDayDelay: 120
+  canEndDay: 0
   isLocked: 0
 --- !u!1001 &1256118383
 PrefabInstance:
@@ -12043,6 +12053,9 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 2.5
   isOpen: 0
+  canEndDayAfterUnlock: 0
+  endDayDelay: 120
+  canEndDay: 0
   isLocked: 0
 --- !u!4 &1450107553 stripped
 Transform:
@@ -12160,6 +12173,9 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 2.5
   isOpen: 0
+  canEndDayAfterUnlock: 1
+  endDayDelay: 120
+  canEndDay: 0
   isLocked: 1
 --- !u!4 &1494418772 stripped
 Transform:

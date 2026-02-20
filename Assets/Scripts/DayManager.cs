@@ -42,7 +42,7 @@ public class DayManager : MonoBehaviour
         clockText.text = string.Format("{0:00}:{1:00} AM", hours, minutes);
     }
 
-    void EndDay()
+    public void EndDay()
     {
         isDayEnded = true;
         if (SanityManager.Instance != null)

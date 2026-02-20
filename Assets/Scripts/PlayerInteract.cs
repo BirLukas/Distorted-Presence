@@ -12,6 +12,11 @@ public class PlayerInteract : MonoBehaviour
     private BookInteract focusedBook;
     private Door focusedDoor;
 
+    [Header("Hold to Interact Settings")]
+    public float requiredHoldTime = 2f;
+    private bool isHoldingInteract = false;
+    private float currentHoldTime = 0f;
+
     void Start()
     {
         cam = Camera.main;
@@ -27,15 +32,24 @@ public class PlayerInteract : MonoBehaviour
             {
                 focusedBook.OpenBook();
             }
-            else if (focusedDoor != null && !focusedDoor.isLocked)
+            else if (focusedDoor != null && !focusedDoor.isLocked && !focusedDoor.canEndDay)
             {
                 focusedDoor.ToggleDoor();
             }
         }
     }
 
+
     void Update()
     {
+        // Poll input directly for hold mechanics since OnInteract is only called on state change
+        isHoldingInteract = Keyboard.current != null && Keyboard.current.eKey.isPressed;
+        
+        if (!isHoldingInteract)
+        {
+            currentHoldTime = 0f;
+        }
+
         focusedBook = null;
         focusedDoor = null;
 
@@ -67,7 +81,29 @@ public class PlayerInteract : MonoBehaviour
                 focusedDoor = door;
                 if (interactPrompt != null)
                 {
-                    if (door.isLocked)
+                    if (door.canEndDay)
+                    {
+                        if (isHoldingInteract)
+                        {
+                            currentHoldTime += Time.deltaTime;
+                            if (currentHoldTime >= requiredHoldTime)
+                            {
+                                currentHoldTime = 0f;
+                                door.canEndDay = false; // Prevent repeated triggers
+                                FindObjectOfType<DayManager>().EndDay();
+                                interactPrompt.gameObject.SetActive(false);
+                                return;
+                            }
+                            int progress = Mathf.RoundToInt((currentHoldTime / requiredHoldTime) * 100);
+                            interactPrompt.text = $"Ending Day... {progress}%";
+                        }
+                        else
+                        {
+                            currentHoldTime = 0f;
+                            interactPrompt.text = "[Hold E] End Day";
+                        }
+                    }
+                    else if (door.isLocked)
                     {
                         interactPrompt.text = "You need to read the book first";
                     }
@@ -80,6 +116,10 @@ public class PlayerInteract : MonoBehaviour
                 return;
             }
         }
+        
+        // Reset hold time if not looking at a door that can end the day
+        currentHoldTime = 0f;
+
         if (interactPrompt != null && interactPrompt.gameObject.activeSelf)
             interactPrompt.gameObject.SetActive(false);
     }

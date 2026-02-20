@@ -12,6 +12,12 @@ public class Door : MonoBehaviour
     private Quaternion openRotation;
     private bool isMoving = false;
 
+    [Header("End Day Settings")]
+    public bool canEndDayAfterUnlock = false;
+    public float endDayDelay = 120f;
+    [HideInInspector] public bool canEndDay = false;
+    private float unlockTimer = 0f;
+
     [Header("Lock Settings")]
     public bool isLocked = false;
 
@@ -26,6 +32,15 @@ public class Door : MonoBehaviour
 
     void Update()
     {
+        if (canEndDayAfterUnlock && !isLocked && !canEndDay)
+        {
+            unlockTimer += Time.deltaTime;
+            if (unlockTimer >= endDayDelay)
+            {
+                canEndDay = true;
+            }
+        }
+
         Quaternion targetRotation = isOpen ? openRotation : closedRotation;
 
         if (Quaternion.Angle(doorVisual.localRotation, targetRotation) > 0.1f)
