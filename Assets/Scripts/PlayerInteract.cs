@@ -90,7 +90,7 @@ public class PlayerInteract : MonoBehaviour
                             {
                                 currentHoldTime = 0f;
                                 door.canEndDay = false; // Prevent repeated triggers
-                                FindObjectOfType<DayManager>().EndDay();
+                                FindFirstObjectByType<DayManager>().EndDay();
                                 interactPrompt.gameObject.SetActive(false);
                                 return;
                             }
