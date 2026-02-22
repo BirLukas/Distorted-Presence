@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.InputSystem;
@@ -11,12 +11,12 @@ public class CameraSystem : MonoBehaviour
     public CanvasGroup flashGroup;
     public Camera playerCamera;
 
-    [Header("Nastavení Pohledu a Zoomu")]
+    [Header("Nastavenï¿½ Pohledu a Zoomu")]
     public float defaultFOV = 60f;
     public float aimedFOV = 30f;
     public float aimSpeed = 5f;
 
-    [Header("Nastavení Blesku")]
+    [Header("Nastavenï¿½ Blesku")]
     public float flashDuration = 0.1f;
 
     private PhotoCapture photoCapture;
@@ -27,7 +27,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (playerCamera == null)
         {
-            Debug.LogError("Chyba: Player Camera není pøiøazena!");
+            Debug.LogError("Chyba: Player Camera nenï¿½ pï¿½iï¿½azena!");
             return;
         }
 
@@ -40,6 +40,13 @@ public class CameraSystem : MonoBehaviour
     }
     public void OnAim(InputValue value)
     {
+        if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver)
+        {
+            if (isAimed) StopAiming();
+            isAimed = false;
+            return;
+        }
+
         isAimed = value.isPressed;
 
         if (isAimed) AimCamera();
@@ -47,6 +54,8 @@ public class CameraSystem : MonoBehaviour
     }
     public void OnFire(InputValue value)
     {
+        if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver) return;
+
         if (value.isPressed && isAimed)
         {
             TakePhoto();
@@ -83,7 +92,7 @@ public class CameraSystem : MonoBehaviour
     IEnumerator FlashEffect()
     {
         if (flashGroup != null) flashGroup.alpha = 1f;
-        yield return new WaitForSeconds(flashDuration);
+        yield return new WaitForSecondsRealtime(flashDuration);
         if (flashGroup != null) flashGroup.alpha = 0f;
     }
 }

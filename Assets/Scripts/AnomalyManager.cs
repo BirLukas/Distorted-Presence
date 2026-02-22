@@ -13,6 +13,7 @@ public class AnomalyManager : MonoBehaviour
     private bool running = true;
 
     private void Awake() => Instance = this;
+
     void Start()
     {
         ResetTimer();
@@ -38,6 +39,7 @@ public class AnomalyManager : MonoBehaviour
 
         CheckUnreportedAnomalies();
     }
+
     void CheckUnreportedAnomalies()
     {
         if (SanityManager.Instance == null) return;
@@ -69,5 +71,40 @@ public class AnomalyManager : MonoBehaviour
         inactive[index].Activate();
 
         Debug.Log("Activated anomaly: " + inactive[index].name);
+    }
+
+    /// <summary>
+    /// Vrátí celkový počet anomálií, které byly aktivovány (aktivní nebo reportované).
+    /// </summary>
+    public int GetTotalTriggeredCount()
+    {
+        return anomalies.FindAll(a => a.IsActive || a.WasReported).Count;
+    }
+
+    /// <summary>
+    /// Vrátí počet anomálií, které hráč úspěšně vyfotil.
+    /// </summary>
+    public int GetPhotographedCount()
+    {
+        return anomalies.FindAll(a => a.WasReported).Count;
+    }
+
+    /// <summary>
+    /// Vrátí celkový počet anomálií v seznamu.
+    /// </summary>
+    public int GetTotalAnomalyCount()
+    {
+        return anomalies.Count;
+    }
+
+    /// <summary>
+    /// Vrátí procento vyfocených anomálií z těch, které byly aktivovány.
+    /// Pokud nebyla aktivována žádná, vrátí 100 (hráč nemusel nic fotit).
+    /// </summary>
+    public float GetPhotographedPercentage()
+    {
+        int triggered = GetTotalTriggeredCount();
+        if (triggered == 0) return 100f;
+        return (GetPhotographedCount() / (float)triggered) * 100f;
     }
 }

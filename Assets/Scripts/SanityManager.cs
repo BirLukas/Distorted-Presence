@@ -17,6 +17,7 @@ public class SanityManager : MonoBehaviour
     [Header("Events & UI")]
     public UnityEvent OnSanityZero;
     public UnityEvent OnVictory;
+    public UnityEvent OnDefeat;
 
     private bool isGameOver = false;
     public bool IsGameOver => isGameOver;
@@ -62,9 +63,28 @@ public class SanityManager : MonoBehaviour
             currentSanity = 0f;
             isGameOver = true;
             StopGame();
+
+            DaySummaryUI ui = DaySummaryUI.Instance;
+            if (ui == null)
+            {
+                ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
+            }
+
+            if (ui != null)
+            {
+                int photographed = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetPhotographedCount() : 0;
+                int triggered = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetTotalTriggeredCount() : 0;
+                ui.ShowSummary(false, 0f, photographed, triggered, "You've gone insane because of insanity!");
+            }
+            else
+            {
+                Debug.LogError("[SanityManager] DaySummaryUI not found in scene!");
+            }
+
             OnSanityZero.Invoke();
         }
     }
+
     public void Victory()
     {
         if (isGameOver) return;
@@ -72,6 +92,15 @@ public class SanityManager : MonoBehaviour
         StopGame();
         OnVictory.Invoke();
     }
+
+    public void Defeat()
+    {
+        if (isGameOver) return;
+        isGameOver = true;
+        StopGame();
+        OnDefeat.Invoke();
+    }
+
     private void StopGame()
     {
         Time.timeScale = 0f;

@@ -53,7 +53,7 @@ public class PlayerInteract : MonoBehaviour
         focusedBook = null;
         focusedDoor = null;
 
-        if (BookInteract.IsUIOpen || CameraSystem.IsAimingGlobal)
+        if (BookInteract.IsUIOpen || CameraSystem.IsAimingGlobal || (SanityManager.Instance != null && SanityManager.Instance.IsGameOver))
         {
             if (interactPrompt != null && interactPrompt.gameObject.activeSelf)
                 interactPrompt.gameObject.SetActive(false);

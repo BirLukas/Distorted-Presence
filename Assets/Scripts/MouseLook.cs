@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MouseLook : MonoBehaviour
 {
-    [Header("Nastavení citlivosti")]
+    [Header("Nastavenï¿½ citlivosti")]
     public float mouseSensitivity = 0.1f;
 
     [Header("Reference z Hierarchie")]
@@ -47,6 +47,7 @@ public class MouseLook : MonoBehaviour
 
     void LateUpdate()
     {
+        if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver) return;
         if (BookInteract.IsUIOpen) return;
 
         float mouseX = lookInput.x * mouseSensitivity;

@@ -8,6 +8,10 @@ public class DayManager : MonoBehaviour
     private float timer;
     private bool isDayEnded = false;
 
+    [Header("Win Condition")]
+    [Range(0f, 100f)]
+    public float requiredAnomalyPercentage = 70f;
+
     [Header("UI References")]
     public TextMeshProUGUI clockText;
 
@@ -18,7 +22,14 @@ public class DayManager : MonoBehaviour
 
     void Update()
     {
-        if (isDayEnded) return;
+        bool isGameOver = SanityManager.Instance != null && SanityManager.Instance.IsGameOver;
+
+        if (isGameOver || isDayEnded)
+        {
+            if (clockText != null && clockText.gameObject.activeSelf)
+                clockText.gameObject.SetActive(false);
+            return;
+        }
 
         if (timer > 0)
         {
@@ -42,12 +53,61 @@ public class DayManager : MonoBehaviour
         clockText.text = string.Format("{0:00}:{1:00} AM", hours, minutes);
     }
 
+    /// <summary>
+    /// Ukončí den – zkontroluje podmínky výhry/prohry a zobrazí souhrn.
+    /// Volá se buď uplynutím času, nebo odchodem dveřmi.
+    /// </summary>
     public void EndDay()
     {
+        if (isDayEnded) return;
         isDayEnded = true;
+
+        if (clockText != null && clockText.gameObject.activeSelf)
+            clockText.gameObject.SetActive(false);
+
+        // Zastav hru
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Zjisti výsledky anomálií
+        int photographed = 0;
+        int triggered = 0;
+
+        if (AnomalyManager.Instance != null)
+        {
+            photographed = AnomalyManager.Instance.GetPhotographedCount();
+            triggered = AnomalyManager.Instance.GetTotalTriggeredCount();
+        }
+
+        float percentage = triggered > 0 ? (photographed / (float)triggered) * 100f : 100f;
+        bool isVictory = percentage >= requiredAnomalyPercentage;
+
+        float sanity = SanityManager.Instance != null ? SanityManager.Instance.CurrentSanity : 0f;
+
+        // Zobraz souhrn dne
+        DaySummaryUI ui = DaySummaryUI.Instance;
+        if (ui == null)
+        {
+            ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
+        }
+
+        if (ui != null)
+        {
+            ui.ShowSummary(isVictory, sanity, photographed, triggered);
+        }
+        else
+        {
+            Debug.LogError("[DayManager] DaySummaryUI not found in scene!");
+        }
+
+        // Informuj SanityManager o výsledku (pro případné eventy)
         if (SanityManager.Instance != null)
         {
-            SanityManager.Instance.Victory();
+            if (isVictory)
+                SanityManager.Instance.Victory();
+            else
+                SanityManager.Instance.Defeat();
         }
     }
 }
