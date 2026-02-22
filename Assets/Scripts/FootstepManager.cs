@@ -4,15 +4,19 @@ public class FootstepManager : MonoBehaviour
 {
     public AudioSource footstepSource;
     public AudioClip[] footstepSounds;
+    public AudioClip[] carpetFootstepSounds;
 
     public float stepInterval = 0.5f;
+    public float sprintStepInterval = 0.3f;
     private float stepTimer;
 
     private CharacterController characterController;
+    private PlayerMovement playerMovement;
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     void Update()
@@ -24,7 +28,7 @@ public class FootstepManager : MonoBehaviour
             if (stepTimer <= 0)
             {
                 PlayFootstep();
-                stepTimer = stepInterval;
+                stepTimer = (playerMovement != null && playerMovement.isSprinting) ? sprintStepInterval : stepInterval;
             }
         }
         else
@@ -35,10 +39,21 @@ public class FootstepManager : MonoBehaviour
 
     void PlayFootstep()
     {
-        if (footstepSounds.Length == 0) return;
+        AudioClip[] currentSounds = footstepSounds;
 
-        int index = Random.Range(0, footstepSounds.Length);
-        footstepSource.clip = footstepSounds[index];
+        // Check the surface below the player
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 2f))
+        {
+            if (hit.collider.CompareTag("Carpet"))
+            {
+                currentSounds = carpetFootstepSounds;
+            }
+        }
+
+        if (currentSounds == null || currentSounds.Length == 0) return;
+
+        int index = Random.Range(0, currentSounds.Length);
+        footstepSource.clip = currentSounds[index];
 
         footstepSource.pitch = Random.Range(0.8f, 1.1f);
         footstepSource.volume = Random.Range(0.7f, 1.0f);

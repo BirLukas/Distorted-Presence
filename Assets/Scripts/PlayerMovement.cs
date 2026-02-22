@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
 
     private Vector2 moveInput;
-    private bool isSprinting;
+    public bool isSprinting { get; private set; }
 
     void Start()
     {

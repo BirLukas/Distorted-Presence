@@ -2721,7 +2721,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3ca8d4c65bff34f479db7634c93a07f2, type: 3}
   - {fileID: 8300000, guid: e5fd8db7a5b3bc04592e2ef9a7882b66, type: 3}
   - {fileID: 8300000, guid: 056f59345b9a69046b1d4a55abb455cf, type: 3}
+  carpetFootstepSounds:
+  - {fileID: 8300000, guid: 11d210936c6d31642bf3f20287e322a9, type: 3}
+  - {fileID: 8300000, guid: 4c4e4fedb5488b74d8718ad8c9cec128, type: 3}
+  - {fileID: 8300000, guid: 902e087378c4b8f4a9f7e2f0ab319644, type: 3}
+  - {fileID: 8300000, guid: 15a201d371b6083469dd322ffd57570f, type: 3}
+  - {fileID: 8300000, guid: 8050f561772d4b843bf2ed0c11ad5a1a, type: 3}
+  - {fileID: 8300000, guid: bf2099d4d02d2e84db3c6a928fb85bb6, type: 3}
   stepInterval: 0.5
+  sprintStepInterval: 0.3
 --- !u!114 &306478947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13753,6 +13761,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Carpet_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 9218377935294861655, guid: 1e711044cbc639d44aa004669771969e, type: 3}
+      propertyPath: m_TagString
+      value: Carpet
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14154,7 +14166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1714542992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17655,7 +17667,7 @@ GameObject:
   - component: {fileID: 1879194043}
   m_Layer: 8
   m_Name: Carpet_Green
-  m_TagString: Untagged
+  m_TagString: Carpet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
