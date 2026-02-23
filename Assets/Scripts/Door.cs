@@ -21,10 +21,18 @@ public class Door : MonoBehaviour
     [Header("Lock Settings")]
     public bool isLocked = false;
 
+    [Header("Audio Settings")]
+    public AudioSource audioSource;
+    public AudioClip openSound;
+    public AudioClip closeSound;
+
     void Start()
     {
         if (doorVisual == null)
             doorVisual = transform;
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
 
         closedRotation = doorVisual.localRotation;
         openRotation = Quaternion.Euler(0, openAngle, 0) * closedRotation;
@@ -61,6 +69,14 @@ public class Door : MonoBehaviour
         if (isMoving) return;
 
         isOpen = !isOpen;
+
+        if (audioSource != null)
+        {
+            if (isOpen && openSound != null)
+                audioSource.PlayOneShot(openSound);
+            else if (!isOpen && closeSound != null)
+                audioSource.PlayOneShot(closeSound);
+        }
     }
     public void LockDoor()
     {
