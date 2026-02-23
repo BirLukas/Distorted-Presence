@@ -14,8 +14,16 @@ public class AnomalyManager : MonoBehaviour
 
     private void Awake() => Instance = this;
 
+    // Počet doposud vygenerovaných anomálií
+    private int generatedAnomaliesToday = 0;
+
     void Start()
     {
+        if (GameProgressionManager.Instance != null)
+        {
+            minDelay = GameProgressionManager.Instance.CurrentMinDelay;
+            maxDelay = GameProgressionManager.Instance.CurrentMaxDelay;
+        }
         ResetTimer();
     }
 
@@ -48,8 +56,10 @@ public class AnomalyManager : MonoBehaviour
 
         if (activeAnomalies.Count > 0)
         {
-            SanityManager.Instance.ApplyUnreportedPenalty(activeAnomalies.Count);
-            Debug.Log($"Active anomalies: {activeAnomalies.Count}. Sanity is decreasing.");
+            // Aplikujeme penalizaci podle aktuálního dne
+            float multiplier = GameProgressionManager.Instance != null ? GameProgressionManager.Instance.CurrentSanityPenalty : 1f;
+            SanityManager.Instance.ApplyUnreportedPenalty(activeAnomalies.Count * (int)multiplier);
+            // Debug.Log($"Active anomalies: {activeAnomalies.Count}. Sanity is decreasing.");
         }
     }
 
@@ -60,6 +70,12 @@ public class AnomalyManager : MonoBehaviour
 
     void TriggerRandomAnomaly()
     {
+        if (GameProgressionManager.Instance != null && generatedAnomaliesToday >= GameProgressionManager.Instance.MaxAnomaliesPerDay)
+        {
+            // Maximální počet dosažen, další se nebudou spawnovat.
+            return;
+        }
+
         var inactive = anomalies.FindAll(a => !a.IsActive && !a.WasReported);
 
         if (inactive.Count == 0)
@@ -69,8 +85,10 @@ public class AnomalyManager : MonoBehaviour
 
         int index = Random.Range(0, inactive.Count);
         inactive[index].Activate();
+        
+        generatedAnomaliesToday++;
 
-        Debug.Log("Activated anomaly: " + inactive[index].name);
+        Debug.Log($"Activated anomaly: {inactive[index].name} ({generatedAnomaliesToday}/{GameProgressionManager.Instance?.MaxAnomaliesPerDay ?? 0})");
     }
 
     /// <summary>

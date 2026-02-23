@@ -5,18 +5,18 @@ using UnityEngine.InputSystem;
 
 public class CameraSystem : MonoBehaviour
 {
-    [Header("Setup Objekty")]
+    [Header("Camera Objects")]
     public GameObject cameraModel;
     public GameObject cameraUI;
     public CanvasGroup flashGroup;
     public Camera playerCamera;
 
-    [Header("Nastaven� Pohledu a Zoomu")]
+    [Header("Camera Setup")]
     public float defaultFOV = 60f;
     public float aimedFOV = 30f;
     public float aimSpeed = 5f;
 
-    [Header("Nastaven� Blesku")]
+    [Header("Flash Setup")]
     public float flashDuration = 0.1f;
 
     private PhotoCapture photoCapture;
@@ -27,7 +27,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (playerCamera == null)
         {
-            Debug.LogError("Chyba: Player Camera nen� p�i�azena!");
+            Debug.LogError("Player Camera is not assigned!");
             return;
         }
 
@@ -84,9 +84,17 @@ public class CameraSystem : MonoBehaviour
         {
             if (photoCapture.GetRemainingFilmCount() > 0)
             {
-                StartCoroutine(FlashEffect());
+                // Předáme akci, která se zavolá po zachycení dat obrazovky (před vykreslením UI blesku)
+                photoCapture.TryCaptureAnomaly(() => 
+                {
+                    StartCoroutine(FlashEffect());
+                });
             }
-            photoCapture.TryCaptureAnomaly();
+            else
+            {
+                // Pokud nemáme film, voláme jen naprázdno pro warning UI
+                photoCapture.TryCaptureAnomaly();
+            }
         }
     }
     IEnumerator FlashEffect()

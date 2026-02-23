@@ -17,19 +17,23 @@ public class PhotoCapture : MonoBehaviour
     [Header("Camera Effect Settings")]
     public AudioSource AudioSource;
     public AudioClip ShutterSound;
+    
+    [Header("Photo History")]
+    public System.Collections.Generic.List<PhotoData> takenPhotos = new System.Collections.Generic.List<PhotoData>();
 
 
     void Start()
     {
         currentFilmCount = maxFilmCount;
         UpdateFilmUI();
+        takenPhotos.Clear();
 
         if (noFilmWarningUI != null)
         {
             noFilmWarningUI.SetActive(false);
         }
     }
-    public void TryCaptureAnomaly()
+    public void TryCaptureAnomaly(System.Action onSnapshotCaptured = null)
     {
         if (currentFilmCount <= 0)
         {
@@ -52,15 +56,18 @@ public class PhotoCapture : MonoBehaviour
             if (anomaly != null && anomaly.IsActive)
             {
                 ProcessAnomalyCapture(anomaly);
+                StartCoroutine(CaptureScreenshotRoutine(true, anomaly.gameObject.name, onSnapshotCaptured));
             }
             else
             {
                 ApplyIncorrectCapturePenalty();
+                StartCoroutine(CaptureScreenshotRoutine(false, hit.collider.gameObject.name, onSnapshotCaptured));
             }
         }
         else
         {
             ApplyIncorrectCapturePenalty();
+            StartCoroutine(CaptureScreenshotRoutine(false, "Unknown", onSnapshotCaptured));
         }
     }
     private void ShowNoFilmWarning()
@@ -130,5 +137,28 @@ public class PhotoCapture : MonoBehaviour
         {
             filmCountText.color = Color.green;
         }
+    }
+
+    private System.Collections.IEnumerator CaptureScreenshotRoutine(bool isCorrect, string targetName, System.Action onSnapshotCaptured)
+    {
+        // Čekáme pouze na konec framu (než se vyrenderuje UI bez blesku)
+        yield return new WaitForEndOfFrame();
+
+        int width = Screen.width;
+        int height = Screen.height;
+        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        
+        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Apply();
+
+        PhotoData pd = new PhotoData();
+        pd.snapshot = tex;
+        pd.isCorrect = isCorrect;
+        pd.targetName = targetName;
+
+        takenPhotos.Add(pd);
+
+        // Nyní odpálíme blesk!
+        onSnapshotCaptured?.Invoke();
     }
 }

@@ -14,12 +14,16 @@ public class DaySummaryUI : MonoBehaviour
     public TextMeshProUGUI sanityText;
     public TextMeshProUGUI anomalyText;
     public TextMeshProUGUI resultDetailText;
+    public TextMeshProUGUI daysLeftText; // Nový text pro počet dnů
+
+    [Header("Photo Grid")]
+    public GameObject photoReviewPanel; // Panel, který obsahuje Grid Parent (lze ho skrývat/zobrazovat)
+    public Transform photoGridParent; // Rodič pro layout (Grid Layout Group)
+    public GameObject photoPrefab; // Prefab pro PhotoReviewUI
 
     [Header("Colors")]
     public Color winColor = new Color(0.2f, 0.8f, 0.2f);
     public Color loseColor = new Color(0.8f, 0.2f, 0.2f);
-
-    private bool isInitialized = false;
 
     private void Awake()
     {
@@ -29,7 +33,6 @@ public class DaySummaryUI : MonoBehaviour
             return;
         }
         Instance = this;
-        isInitialized = true;
     }
 
     private void Start()
@@ -47,6 +50,12 @@ public class DaySummaryUI : MonoBehaviour
         summaryPanel.SetActive(true);
 
         float percentage = totalCount > 0 ? (photographedCount / (float)totalCount) * 100f : 0f;
+
+        // Dny do konce
+        if (daysLeftText != null && GameProgressionManager.Instance != null)
+        {
+            daysLeftText.text = $"Day <b>{GameProgressionManager.Instance.currentDay}</b> / {GameProgressionManager.Instance.maxDays}";
+        }
 
         // Titulek
         if (titleText != null)
@@ -82,8 +91,79 @@ public class DaySummaryUI : MonoBehaviour
             }
             else
             {
-                resultDetailText.text = $"You need to photograph at least 70% of the anomalies.\nYou only photographed {percentage:F0}%.";
+                resultDetailText.text = $"You need to photograph at least {(percentage > 0 ? "more" : "some")} anomalies.\nYou only photographed {percentage:F0}%.";
             }
+        }
+
+        // Zobrazení historie vyfocených snímků posbíráme na pozadí
+        PopulatePhotoGrid();
+
+        // Panel s fotkami schováme ze začátku, dokud ho hráč nezapne
+        if (photoReviewPanel != null)
+        {
+            photoReviewPanel.SetActive(false);
+        }
+    }
+
+    private void PopulatePhotoGrid()
+    {
+        if (photoGridParent == null || photoPrefab == null) return;
+
+        // Smažeme případné staré fotky
+        foreach (Transform child in photoGridParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        PhotoCapture pCapture = FindFirstObjectByType<PhotoCapture>();
+        if (pCapture == null) return;
+
+        foreach (var pData in pCapture.takenPhotos)
+        {
+            GameObject obj = Instantiate(photoPrefab, photoGridParent);
+            PhotoReviewUI pUI = obj.GetComponent<PhotoReviewUI>();
+            
+            if (pUI != null)
+            {
+                pUI.Setup(pData);
+            }
+        }
+    }
+
+    // Volat přes OnClick v Unity u tlačítka "Zobrazit / Skrýt Fotky"
+    public void TogglePhotoReview()
+    {
+        if (photoReviewPanel != null)
+        {
+            photoReviewPanel.SetActive(!photoReviewPanel.activeSelf);
+        }
+    }
+
+    // Volat přes OnClick v Unity u tlačítka "Další den" nebo "Restart"
+    public void OnNextDayClicked()
+    {
+        // Vrátíme čas do normálu
+        Time.timeScale = 1f;
+
+        if (GameProgressionManager.Instance != null && SanityManager.Instance != null)
+        {
+            if (SanityManager.Instance.IsGameOver)
+            {
+                // Smrt (Nebo dohráno) -> Chtělo by to restart scén 
+                // Zde například načíst scénu s indexem 0 (nebo podle jména)
+                GameProgressionManager.Instance.ResetProgression();
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
+            else
+            {
+                // Jdeme na další den - reload aktuální scény pro restart anomálií a časovače
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+        else
+        {
+            // Fallback (např. pokud se testuje bez Manageru)
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

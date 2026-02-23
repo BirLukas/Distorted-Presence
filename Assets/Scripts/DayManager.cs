@@ -77,7 +77,12 @@ public class DayManager : MonoBehaviour
         if (AnomalyManager.Instance != null)
         {
             photographed = AnomalyManager.Instance.GetPhotographedCount();
-            triggered = AnomalyManager.Instance.GetTotalTriggeredCount();
+            
+            // Total by se měl vázat spíš na celkový limit obsažený v Progression
+            if (GameProgressionManager.Instance != null)
+                triggered = GameProgressionManager.Instance.MaxAnomaliesPerDay;
+            else
+                triggered = AnomalyManager.Instance.GetTotalTriggeredCount();
         }
 
         float percentage = triggered > 0 ? (photographed / (float)triggered) * 100f : 100f;
@@ -99,6 +104,12 @@ public class DayManager : MonoBehaviour
         else
         {
             Debug.LogError("[DayManager] DaySummaryUI not found in scene!");
+        }
+
+        // Posun dne pokud je výhra
+        if (isVictory && GameProgressionManager.Instance != null)
+        {
+            GameProgressionManager.Instance.AdvanceDay();
         }
 
         // Informuj SanityManager o výsledku (pro případné eventy)
