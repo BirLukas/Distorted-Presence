@@ -14,10 +14,15 @@ public class DayManager : MonoBehaviour
 
     [Header("UI References")]
     public TextMeshProUGUI clockText;
+    public TextMeshProUGUI currentDayText;
 
     void Start()
     {
         timer = dayDuration;
+        if (currentDayText != null && GameProgressionManager.Instance != null)
+        {
+            currentDayText.text = $"Day {GameProgressionManager.Instance.currentDay}";
+        }
     }
 
     void Update()

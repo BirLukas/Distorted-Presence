@@ -45,6 +45,7 @@ public class DaySummaryUI : MonoBehaviour
 
     public void ShowSummary(bool isVictory, float sanity, int photographedCount, int totalCount, string reason = "")
     {
+        lastResultWasVictory = isVictory;
         if (summaryPanel == null) return;
 
         summaryPanel.SetActive(true);
@@ -139,24 +140,25 @@ public class DaySummaryUI : MonoBehaviour
         }
     }
 
+    private bool lastResultWasVictory;
+
     // Volat přes OnClick v Unity u tlačítka "Další den" nebo "Restart"
     public void OnNextDayClicked()
     {
         // Vrátíme čas do normálu
         Time.timeScale = 1f;
 
-        if (GameProgressionManager.Instance != null && SanityManager.Instance != null)
+        if (GameProgressionManager.Instance != null)
         {
-            if (SanityManager.Instance.IsGameOver)
+            if (lastResultWasVictory)
             {
-                // Smrt (Nebo dohráno) -> Chtělo by to restart scén 
-                // Zde například načíst scénu s indexem 0 (nebo podle jména)
-                GameProgressionManager.Instance.ResetProgression();
+                // Jdeme na další den - reload aktuální scény pro restart anomálií a časovače
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             }
             else
             {
-                // Jdeme na další den - reload aktuální scény pro restart anomálií a časovače
+                // Smrt (Nebo dohráno) -> Chtělo by to restart scén 
+                GameProgressionManager.Instance.ResetProgression();
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             }
         }
