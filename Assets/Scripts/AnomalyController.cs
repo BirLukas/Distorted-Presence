@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class AnomalyController : MonoBehaviour
@@ -24,6 +24,10 @@ public class AnomalyController : MonoBehaviour
     [Header("Scale Settings")]
     public float scaleMultiplier = 1.5f;
 
+    [Header("Audio Settings")]
+    public AudioClip onReportSound;
+    private AudioSource audioSource;
+
     private bool isActive = false;
     public bool IsActive => isActive;
 
@@ -40,6 +44,17 @@ public class AnomalyController : MonoBehaviour
 
     void Start()
     {
+        if (onReportSound != null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+                // Optional: make it 2D or 3D sound
+                audioSource.spatialBlend = 1f; 
+            }
+        }
+
         renderers = GetComponentsInChildren<Renderer>(true);
         originalRendererColors = new Color[renderers.Length];
         for (int i = 0; i < renderers.Length; i++)
@@ -124,6 +139,11 @@ public class AnomalyController : MonoBehaviour
     {
         isActive = false;
         wasReported = true;
+
+        if (onReportSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(onReportSound);
+        }
     }
 
     public void Activate()

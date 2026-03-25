@@ -5726,6 +5726,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0, a: 1}
   scaleMultiplier: 1.5
+  onReportSound: {fileID: 0}
 --- !u!1001 &676891192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8444,6 +8445,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0, a: 1}
   scaleMultiplier: 4
+  onReportSound: {fileID: 0}
 --- !u!1001 &950878604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10058,6 +10060,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0.99215686, a: 1}
   scaleMultiplier: 1.5
+  onReportSound: {fileID: 0}
 --- !u!114 &1105102052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10480,6 +10483,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 0, g: 0, b: 0, a: 1}
   scaleMultiplier: 1.5
+  onReportSound: {fileID: 0}
 --- !u!1 &1177864993
 GameObject:
   m_ObjectHideFlags: 0
@@ -14140,6 +14144,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0, a: 1}
   scaleMultiplier: 1.5
+  onReportSound: {fileID: 8300000, guid: 1656c77bbe4e0cb49b1e4f68597926e5, type: 3}
 --- !u!4 &1592769296
 Transform:
   m_ObjectHideFlags: 0
@@ -14703,6 +14708,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0, a: 1}
   scaleMultiplier: 1.5
+  onReportSound: {fileID: 0}
 --- !u!1 &1646446628
 GameObject:
   m_ObjectHideFlags: 0
@@ -16828,6 +16834,7 @@ MonoBehaviour:
   transitionSpeed: 2
   targetColor: {r: 1, g: 0, b: 0, a: 1}
   scaleMultiplier: 2
+  onReportSound: {fileID: 0}
 --- !u!1001 &1885820076
 PrefabInstance:
   m_ObjectHideFlags: 0
