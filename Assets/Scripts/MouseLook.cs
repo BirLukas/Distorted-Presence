@@ -3,10 +3,10 @@ using UnityEngine.InputSystem;
 
 public class MouseLook : MonoBehaviour
 {
-    [Header("Nastaven� citlivosti")]
+    [Header("Sensitivity")]
     public float mouseSensitivity = 0.1f;
 
-    [Header("Reference z Hierarchie")]
+    [Header("References")]
     public Transform playerBody;
     public Transform cameraTransform;
 

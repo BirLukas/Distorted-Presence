@@ -12,6 +12,9 @@ public class Door : MonoBehaviour
     private Quaternion openRotation;
     private bool isMoving = false;
 
+    private Collider doorCollider;
+    private CharacterController playerController;
+
     [Header("End Day Settings")]
     public bool canEndDayAfterUnlock = false;
     public float endDayDelay = 120f;
@@ -36,6 +39,13 @@ public class Door : MonoBehaviour
 
         closedRotation = doorVisual.localRotation;
         openRotation = Quaternion.Euler(0, openAngle, 0) * closedRotation;
+
+        doorCollider = doorVisual.GetComponentInChildren<Collider>();
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        {
+            playerController = playerObj.GetComponent<CharacterController>();
+        }
     }
 
     void Update()
@@ -53,8 +63,36 @@ public class Door : MonoBehaviour
 
         if (Quaternion.Angle(doorVisual.localRotation, targetRotation) > 0.1f)
         {
+            Quaternion prevRotation = doorVisual.localRotation;
             doorVisual.localRotation = Quaternion.Slerp(doorVisual.localRotation, targetRotation, Time.deltaTime * openSpeed);
             isMoving = true;
+
+            if (doorCollider != null && playerController != null)
+            {
+                Vector3 direction;
+                float distance;
+                bool isOverlapping = Physics.ComputePenetration(
+                    doorCollider, doorCollider.transform.position, doorCollider.transform.rotation,
+                    playerController, playerController.transform.position, playerController.transform.rotation,
+                    out direction, out distance
+                );
+
+                if (isOverlapping)
+                {
+                    playerController.Move(direction * distance);
+                    
+                    bool stillOverlapping = Physics.ComputePenetration(
+                        doorCollider, doorCollider.transform.position, doorCollider.transform.rotation,
+                        playerController, playerController.transform.position, playerController.transform.rotation,
+                        out direction, out distance
+                    );
+
+                    if (stillOverlapping && distance > 0.01f)
+                    {
+                        doorVisual.localRotation = prevRotation;
+                    }
+                }
+            }
         }
         else
         {

@@ -1961,6 +1961,10 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2632421638504023055, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 1247300054}
     - target: {fileID: 3297694727869580020, guid: 54dd3e7aa6041054d9244e7fc3e9700f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3192,7 +3196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9c86aed5d005e4eb9d0a02fa2957a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
-  mouseSensitivity: 1
+  mouseSensitivity: 0.55
   playerBody: {fileID: 306478945}
   cameraTransform: {fileID: 492952497}
 --- !u!1001 &320666370
@@ -9091,7 +9095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db145e821ba600244aab40d2631be16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PhotoCapture
-  raycastDistance: 20
+  raycastDistance: 50
   anomalyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -11411,6 +11415,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1225259692}
   m_CullTransparentMesh: 1
+--- !u!134 &1247300054
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ' (Instance)'
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
 --- !u!1001 &1256118383
 PrefabInstance:
   m_ObjectHideFlags: 0
