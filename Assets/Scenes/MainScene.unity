@@ -174,7 +174,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2317576605586580694, guid: 5adaedd4c0081614da171fecdf6bbd37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1355564180}
   m_SourcePrefab: {fileID: 100100000, guid: 5adaedd4c0081614da171fecdf6bbd37, type: 3}
 --- !u!4 &2899290 stripped
 Transform:
@@ -3046,6 +3049,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9007913389052863591, guid: 842735df7d8eccf4c8d59febf0d5988f, type: 3}
   m_PrefabInstance: {fileID: 293178654}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &297296498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 671642595043061461, guid: 80ad3c9dfddeab74c8887589ad03f1e1, type: 3}
+  m_PrefabInstance: {fileID: 329014518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &305288381
 GameObject:
   m_ObjectHideFlags: 0
@@ -3316,7 +3324,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 671642595043061461, guid: 80ad3c9dfddeab74c8887589ad03f1e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 456726464}
   m_SourcePrefab: {fileID: 100100000, guid: 80ad3c9dfddeab74c8887589ad03f1e1, type: 3}
 --- !u!1001 &335474451
 PrefabInstance:
@@ -4201,6 +4212,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8837811125771167959, guid: 80ad3c9dfddeab74c8887589ad03f1e1, type: 3}
   m_PrefabInstance: {fileID: 329014518}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &456726464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297296498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51984a5764f9c85409e41940234390b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DistortedSound
+  distortionLevel: 0.8
+  minPitch: 0.6
+  maxPitch: 0.9
+  pitchChangeSpeed: 2
 --- !u!1 &461771389
 GameObject:
   m_ObjectHideFlags: 0
@@ -5930,6 +5957,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4055591486681154334, guid: 06b9d15b7d33e854cb23fe58a33238aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 677381657}
+    - targetCorrespondingSourceObject: {fileID: 4055591486681154334, guid: 06b9d15b7d33e854cb23fe58a33238aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 677381662}
     - targetCorrespondingSourceObject: {fileID: 5634946493197523181, guid: 06b9d15b7d33e854cb23fe58a33238aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 677381656}
@@ -6007,6 +6037,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &677381662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677381655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!21 &681319267
 Material:
   serializedVersion: 8
@@ -12729,6 +12776,26 @@ Transform:
   - {fileID: 1317749520}
   m_Father: {fileID: 1103703166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1355564179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2317576605586580694, guid: 5adaedd4c0081614da171fecdf6bbd37, type: 3}
+  m_PrefabInstance: {fileID: 2899289}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1355564180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355564179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c6b3d6e9cd93b4b999403ec24cc236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchEffect
+  glitchProbability: 0.1
+  positionJitterAmount: 0.05
+  invisibleProbability: 0.05
 --- !u!21 &1366160315
 Material:
   serializedVersion: 8
@@ -18394,6 +18461,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9222988866110790705, guid: 4b437f1c2454a2c409b1b7f35e69d661, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2079686356}
+    - targetCorrespondingSourceObject: {fileID: 9222988866110790705, guid: 4b437f1c2454a2c409b1b7f35e69d661, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2079686358}
   m_SourcePrefab: {fileID: 100100000, guid: 4b437f1c2454a2c409b1b7f35e69d661, type: 3}
 --- !u!4 &2079686354 stripped
 Transform:
@@ -18434,6 +18504,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &2079686358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079686355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1001 &2082941735
 PrefabInstance:
   m_ObjectHideFlags: 0
