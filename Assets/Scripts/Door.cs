@@ -46,6 +46,12 @@ public class Door : MonoBehaviour
         {
             playerController = playerObj.GetComponent<CharacterController>();
         }
+
+        // Fallback if tag is missing or incorrect
+        if (playerController == null)
+        {
+            playerController = Object.FindFirstObjectByType<CharacterController>();
+        }
     }
 
     void Update()
@@ -63,35 +69,36 @@ public class Door : MonoBehaviour
 
         if (Quaternion.Angle(doorVisual.localRotation, targetRotation) > 0.1f)
         {
-            Quaternion prevRotation = doorVisual.localRotation;
-            doorVisual.localRotation = Quaternion.Slerp(doorVisual.localRotation, targetRotation, Time.deltaTime * openSpeed);
-            isMoving = true;
+            Quaternion nextRotation = Quaternion.Slerp(doorVisual.localRotation, targetRotation, Time.deltaTime * openSpeed);
+            bool canMove = true;
 
             if (doorCollider != null && playerController != null)
             {
+                // Predictive check: see if the NEXT rotation would hit the player's CURRENT position.
+                // We do this BEFORE moving the door to prevent Unity's automatic pushing behavior.
                 Vector3 direction;
                 float distance;
-                bool isOverlapping = Physics.ComputePenetration(
-                    doorCollider, doorCollider.transform.position, doorCollider.transform.rotation,
+                bool wouldOverlap = Physics.ComputePenetration(
+                    doorCollider, doorCollider.transform.position, nextRotation,
                     playerController, playerController.transform.position, playerController.transform.rotation,
                     out direction, out distance
                 );
 
-                if (isOverlapping)
+                if (wouldOverlap && distance > 0.01f)
                 {
-                    playerController.Move(direction * distance);
-                    
-                    bool stillOverlapping = Physics.ComputePenetration(
-                        doorCollider, doorCollider.transform.position, doorCollider.transform.rotation,
-                        playerController, playerController.transform.position, playerController.transform.rotation,
-                        out direction, out distance
-                    );
-
-                    if (stillOverlapping && distance > 0.01f)
-                    {
-                        doorVisual.localRotation = prevRotation;
-                    }
+                    canMove = false;
                 }
+            }
+
+            if (canMove)
+            {
+                doorVisual.localRotation = nextRotation;
+                isMoving = true;
+            }
+            else
+            {
+                // Door is blocked, stay still but keep isMoving true so we keep checking
+                isMoving = true;
             }
         }
         else
