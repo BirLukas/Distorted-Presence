@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 324079205254573409}
   - component: {fileID: 7255535115426803687}
   - component: {fileID: 2048597378930291740}
+  - component: {fileID: 1176973916597528552}
   m_Layer: 10
   m_Name: CandleLight (6)
   m_TagString: Untagged
@@ -130,14 +131,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1138481573295946907}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -228,6 +229,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &1176973916597528552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138481573295946907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &1373816681327764510
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +396,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &94327225118650334
 MeshCollider:
@@ -457,6 +476,7 @@ GameObject:
   - component: {fileID: 1051536415177150971}
   - component: {fileID: 4340695101475551195}
   - component: {fileID: 2365732777913910836}
+  - component: {fileID: 4171890069628738340}
   m_Layer: 10
   m_Name: CandleLight (7)
   m_TagString: Untagged
@@ -487,14 +507,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2786600103483035112}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -585,6 +605,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &4171890069628738340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2786600103483035112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &2962558388476945060
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +678,7 @@ GameObject:
   - component: {fileID: 5853327309285647577}
   - component: {fileID: 7854596889599228772}
   - component: {fileID: 6886482307719894912}
+  - component: {fileID: 7297884196123113033}
   m_Layer: 10
   m_Name: CandleLight (2)
   m_TagString: Untagged
@@ -671,14 +709,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3660584054085580292}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -769,6 +807,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &7297884196123113033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660584054085580292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &4034299983055215339
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +836,7 @@ GameObject:
   - component: {fileID: 3860938443833266901}
   - component: {fileID: 1284904995902344133}
   - component: {fileID: 1791661474169425931}
+  - component: {fileID: 5592499149023117036}
   m_Layer: 10
   m_Name: CandleLight (5)
   m_TagString: Untagged
@@ -811,14 +867,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4034299983055215339}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -909,6 +965,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &5592499149023117036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4034299983055215339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &4559376532024242747
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +994,7 @@ GameObject:
   - component: {fileID: 257036739135621294}
   - component: {fileID: 3008347107505688808}
   - component: {fileID: 7587129243765898912}
+  - component: {fileID: 323720357666959499}
   m_Layer: 10
   m_Name: CandleLight
   m_TagString: Untagged
@@ -951,14 +1025,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4559376532024242747}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -1049,6 +1123,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &323720357666959499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4559376532024242747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &5078532816604258152
 GameObject:
   m_ObjectHideFlags: 0
@@ -1061,6 +1152,7 @@ GameObject:
   - component: {fileID: 8894861915914031824}
   - component: {fileID: 7968230179333093484}
   - component: {fileID: 5331786657891612385}
+  - component: {fileID: 1926292954962593088}
   m_Layer: 10
   m_Name: CandleLight (1)
   m_TagString: Untagged
@@ -1091,14 +1183,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5078532816604258152}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -1189,6 +1281,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &1926292954962593088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078532816604258152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &5289299642118213962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,6 +1310,7 @@ GameObject:
   - component: {fileID: 7614575370774986570}
   - component: {fileID: 5389017115152951580}
   - component: {fileID: 905334806409311928}
+  - component: {fileID: 8587981034554351775}
   m_Layer: 10
   m_Name: CandleLight (3)
   m_TagString: Untagged
@@ -1231,14 +1341,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5289299642118213962}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -1329,6 +1439,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &8587981034554351775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5289299642118213962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &5297330881077103595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,6 +1468,7 @@ GameObject:
   - component: {fileID: 6044979481632021707}
   - component: {fileID: 7623077450582884376}
   - component: {fileID: 6919845823587759243}
+  - component: {fileID: 3001431492626344393}
   m_Layer: 10
   m_Name: CandleLight (4)
   m_TagString: Untagged
@@ -1371,14 +1499,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5297330881077103595}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -1469,6 +1597,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &3001431492626344393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297330881077103595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &5866840724650261777
 GameObject:
   m_ObjectHideFlags: 0

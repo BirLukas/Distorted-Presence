@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 1114773739493970588}
   - component: {fileID: 6736231434863590876}
   - component: {fileID: 524451506829522217}
+  - component: {fileID: 7273108139963733108}
   m_Layer: 10
   m_Name: CandleLight (1)
   m_TagString: Untagged
@@ -86,14 +87,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2354486635074058067}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 1.5
   m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -184,6 +185,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &7273108139963733108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354486635074058067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &6316775257304867669
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +214,7 @@ GameObject:
   - component: {fileID: 2149857149831209931}
   - component: {fileID: 1077952424514272839}
   - component: {fileID: 787734083629427490}
+  - component: {fileID: 6818771398822617525}
   m_Layer: 10
   m_Name: CandleLight (2)
   m_TagString: Untagged
@@ -226,14 +245,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6316775257304867669}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 1.5
   m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -324,6 +343,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &6818771398822617525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6316775257304867669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &6361864610118385978
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +460,7 @@ GameObject:
   - component: {fileID: 2992976193325264541}
   - component: {fileID: 6222370200006673433}
   - component: {fileID: 6050569737056645716}
+  - component: {fileID: 4747075967091059832}
   m_Layer: 10
   m_Name: CandleLight
   m_TagString: Untagged
@@ -454,14 +491,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7387968435084664567}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.9529412, g: 0.81960785, b: 0.45490196, a: 1}
   m_Intensity: 1.5
   m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -552,6 +589,23 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &4747075967091059832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387968435084664567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37756ebfc8b180d47b2450c4f4c49023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkingLight
+  minIntensity: 0
+  minOffTime: 0.05
+  maxOffTime: 0.2
+  minOnTime: 0.1
+  maxOnTime: 1
 --- !u!1 &8266949716707160795
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,6 +702,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8266949716707160794
 MeshCollider:
