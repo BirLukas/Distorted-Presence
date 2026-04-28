@@ -95,20 +95,38 @@ public class DayManager : MonoBehaviour
 
         float sanity = SanityManager.Instance != null ? SanityManager.Instance.CurrentSanity : 0f;
 
-        // Zobraz souhrn dne
-        DaySummaryUI ui = DaySummaryUI.Instance;
-        if (ui == null)
+        if (isVictory)
         {
-            ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
-        }
+            // Zobraz souhrn dne rovnou při výhře
+            DaySummaryUI ui = DaySummaryUI.Instance;
+            if (ui == null)
+            {
+                ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
+            }
 
-        if (ui != null)
-        {
-            ui.ShowSummary(isVictory, sanity, photographed, triggered);
+            if (ui != null)
+            {
+                ui.ShowSummary(true, sanity, photographed, triggered);
+            }
+            else
+            {
+                Debug.LogError("[DayManager] DaySummaryUI not found in scene!");
+            }
         }
         else
         {
-            Debug.LogError("[DayManager] DaySummaryUI not found in scene!");
+            // Prohra -> jumpscare
+            if (JumpscareManager.Instance != null)
+            {
+                JumpscareManager.Instance.TriggerJumpscare(sanity, photographed, triggered, "");
+            }
+            else
+            {
+                Debug.LogWarning("[DayManager] JumpscareManager not found! Falling back to summary.");
+                DaySummaryUI ui = DaySummaryUI.Instance;
+                if (ui == null) ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
+                if (ui != null) ui.ShowSummary(false, sanity, photographed, triggered);
+            }
         }
 
         // Posun dne pokud je výhra

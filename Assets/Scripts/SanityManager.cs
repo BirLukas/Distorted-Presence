@@ -64,21 +64,19 @@ public class SanityManager : MonoBehaviour
             isGameOver = true;
             StopGame();
 
-            DaySummaryUI ui = DaySummaryUI.Instance;
-            if (ui == null)
-            {
-                ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
-            }
+            int photographed = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetPhotographedCount() : 0;
+            int triggered = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetTotalTriggeredCount() : 0;
 
-            if (ui != null)
+            if (JumpscareManager.Instance != null)
             {
-                int photographed = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetPhotographedCount() : 0;
-                int triggered = AnomalyManager.Instance != null ? AnomalyManager.Instance.GetTotalTriggeredCount() : 0;
-                ui.ShowSummary(false, 0f, photographed, triggered, "You've gone insane because of insanity!");
+                JumpscareManager.Instance.TriggerJumpscare(0f, photographed, triggered, "You've gone insane because of insanity!");
             }
             else
             {
-                Debug.LogError("[SanityManager] DaySummaryUI not found in scene!");
+                Debug.LogWarning("[SanityManager] JumpscareManager not found! Falling back to summary.");
+                DaySummaryUI ui = DaySummaryUI.Instance;
+                if (ui == null) ui = FindFirstObjectByType<DaySummaryUI>(FindObjectsInactive.Include);
+                if (ui != null) ui.ShowSummary(false, 0f, photographed, triggered, "You've gone insane because of insanity!");
             }
 
             OnSanityZero.Invoke();
