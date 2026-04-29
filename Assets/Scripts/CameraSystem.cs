@@ -179,7 +179,6 @@ public class CameraSystem : MonoBehaviour
         isAimed = false;
         IsAimingGlobal = false;
         
-        if (cameraModel != null) cameraModel.SetActive(true);
         if (cameraUI != null) cameraUI.SetActive(false);
         
         if (playerCamera != null)
@@ -191,5 +190,10 @@ public class CameraSystem : MonoBehaviour
         {
             overlayCamera.fieldOfView = defaultFOV;
         }
+    }
+
+    public void SetCameraModelVisible(bool visible)
+    {
+        if (cameraModel != null) cameraModel.SetActive(visible);
     }
 }
