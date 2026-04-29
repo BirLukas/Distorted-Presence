@@ -9,7 +9,9 @@ public class AnomalyController : MonoBehaviour
         ScaleChange,
         LightColorChange,
         MissingObject,
-        AddedObject
+        AddedObject,
+        ShadowChange,
+        VisualIllusion
     }
 
     [Header("Type")]
@@ -23,6 +25,15 @@ public class AnomalyController : MonoBehaviour
 
     [Header("Scale Settings")]
     public float scaleMultiplier = 1.5f;
+
+    [Header("Shadow Settings")]
+    public UnityEngine.Rendering.ShadowCastingMode targetShadowMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+
+    [Header("Visual Illusion Settings")]
+    public float illusionJitterIntensity = 0.05f;
+    public float illusionRotationSpeed = 50f;
+    [Tooltip("Vzdálenost od středu obrazovky (0.5), kdy se začne projevovat iluze. Např. 0.3 znamená, že iluze funguje, když je X menší než 0.2 nebo větší než 0.8.")]
+    public float peripheralThreshold = 0.3f;
 
     [Header("Audio Settings")]
     public AudioClip onReportSound;
@@ -41,6 +52,9 @@ public class AnomalyController : MonoBehaviour
     private Color[] originalLightColors;
 
     private Dictionary<Transform, Vector3> originalScales;
+    private UnityEngine.Rendering.ShadowCastingMode[] originalShadowModes;
+    private Dictionary<Transform, Quaternion> originalRotations;
+    private Dictionary<Transform, Vector3> originalPositions;
 
     void Start()
     {
@@ -70,9 +84,19 @@ public class AnomalyController : MonoBehaviour
         }
 
         originalScales = new Dictionary<Transform, Vector3>();
+        originalRotations = new Dictionary<Transform, Quaternion>();
+        originalPositions = new Dictionary<Transform, Vector3>();
         foreach (Transform t in GetComponentsInChildren<Transform>(true))
         {
             originalScales[t] = t.localScale;
+            originalRotations[t] = t.localRotation;
+            originalPositions[t] = t.localPosition;
+        }
+
+        originalShadowModes = new UnityEngine.Rendering.ShadowCastingMode[renderers.Length];
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            originalShadowModes[i] = renderers[i].shadowCastingMode;
         }
     }
 
@@ -93,6 +117,59 @@ public class AnomalyController : MonoBehaviour
             case AnomalyType.LightColorChange:
                 ApplyLightColorChange();
                 break;
+
+            case AnomalyType.VisualIllusion:
+                ApplyVisualIllusion();
+                break;
+        }
+    }
+
+    void ApplyVisualIllusion()
+    {
+        if (Camera.main == null) return;
+
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
+
+        // Zkontrolujeme, zda je objekt před kamerou (z > 0) a v rámci viewportu obrazovky
+        bool isVisible = viewportPos.z > 0 && viewportPos.x > 0 && viewportPos.x < 1 && viewportPos.y > 0 && viewportPos.y < 1;
+
+        // Vzdálenost od středu obrazovky (0.5) v ose X
+        float distanceFromCenter = Mathf.Abs(viewportPos.x - 0.5f);
+
+        if (isVisible && distanceFromCenter > peripheralThreshold)
+        {
+            // Je v periferním vidění - aplikujeme jitter a rotaci
+            foreach (var kvp in originalPositions)
+            {
+                Transform t = kvp.Key;
+                if (t == null) continue;
+                Vector3 originalPos = kvp.Value;
+                Vector3 jitter = new Vector3(
+                    Random.Range(-illusionJitterIntensity, illusionJitterIntensity),
+                    Random.Range(-illusionJitterIntensity, illusionJitterIntensity),
+                    Random.Range(-illusionJitterIntensity, illusionJitterIntensity)
+                );
+                t.localPosition = originalPos + jitter;
+            }
+
+            foreach (var kvp in originalRotations)
+            {
+                Transform t = kvp.Key;
+                if (t == null) continue;
+                t.Rotate(Vector3.up * illusionRotationSpeed * Time.deltaTime);
+            }
+        }
+        else
+        {
+            // Je sledován přímo (nebo není vidět) - ihned vrátit do původního stavu
+            foreach (var kvp in originalPositions)
+            {
+                if (kvp.Key != null) kvp.Key.localPosition = kvp.Value;
+            }
+            foreach (var kvp in originalRotations)
+            {
+                if (kvp.Key != null) kvp.Key.localRotation = kvp.Value;
+            }
         }
     }
 
@@ -176,6 +253,13 @@ public class AnomalyController : MonoBehaviour
                 if (l != null) l.enabled = true;
             }
         }
+        else if (anomalyType == AnomalyType.ShadowChange)
+        {
+            foreach (Renderer r in renderers)
+            {
+                if (r != null) r.shadowCastingMode = targetShadowMode;
+            }
+        }
     }
     public void ResetAnomaly()
     {
@@ -197,6 +281,21 @@ public class AnomalyController : MonoBehaviour
         foreach (var kvp in originalScales)
         {
             if (kvp.Key != null) kvp.Key.localScale = kvp.Value;
+        }
+
+        foreach (var kvp in originalPositions)
+        {
+            if (kvp.Key != null) kvp.Key.localPosition = kvp.Value;
+        }
+
+        foreach (var kvp in originalRotations)
+        {
+            if (kvp.Key != null) kvp.Key.localRotation = kvp.Value;
+        }
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null) renderers[i].shadowCastingMode = originalShadowModes[i];
         }
 
         if (anomalyType == AnomalyType.MissingObject)
