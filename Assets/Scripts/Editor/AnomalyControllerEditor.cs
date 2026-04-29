@@ -62,19 +62,15 @@ public class AnomalyControllerEditor : Editor
                 EditorGUILayout.PropertyField(scaleMultiplierProp);
                 break;
 
-            case AnomalyController.AnomalyType.ShadowChange:
-                EditorGUILayout.PropertyField(targetShadowModeProp);
-                break;
-
             case AnomalyController.AnomalyType.VisualIllusion:
                 EditorGUILayout.PropertyField(illusionJitterIntensityProp);
                 EditorGUILayout.PropertyField(illusionRotationSpeedProp);
                 EditorGUILayout.PropertyField(peripheralThresholdProp);
                 break;
 
+            case AnomalyController.AnomalyType.ShadowChange:
             case AnomalyController.AnomalyType.MissingObject:
             case AnomalyController.AnomalyType.AddedObject:
-                // Tyto nemají žádné speciální nastavení
                 EditorGUILayout.HelpBox("Tento typ anomálie nevyžaduje žádné dodatečné nastavení.", MessageType.Info);
                 break;
         }

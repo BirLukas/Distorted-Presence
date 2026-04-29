@@ -26,8 +26,7 @@ public class AnomalyController : MonoBehaviour
     [Header("Scale Settings")]
     public float scaleMultiplier = 1.5f;
 
-    [Header("Shadow Settings")]
-    public UnityEngine.Rendering.ShadowCastingMode targetShadowMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+
 
     [Header("Visual Illusion Settings")]
     public float illusionJitterIntensity = 0.05f;
@@ -52,10 +51,11 @@ public class AnomalyController : MonoBehaviour
     private Color[] originalLightColors;
 
     private Dictionary<Transform, Vector3> originalScales;
-    private UnityEngine.Rendering.ShadowCastingMode[] originalShadowModes;
+
     private Dictionary<Transform, Quaternion> originalRotations;
     private Dictionary<Transform, Vector3> originalPositions;
-
+    private Dictionary<Collider, bool> originalCollidersEnabled;
+    private Dictionary<Collider, bool> originalCollidersIsTrigger;
     void Start()
     {
         if (onReportSound != null)
@@ -93,11 +93,16 @@ public class AnomalyController : MonoBehaviour
             originalPositions[t] = t.localPosition;
         }
 
-        originalShadowModes = new UnityEngine.Rendering.ShadowCastingMode[renderers.Length];
-        for (int i = 0; i < renderers.Length; i++)
+        originalCollidersEnabled = new Dictionary<Collider, bool>();
+        originalCollidersIsTrigger = new Dictionary<Collider, bool>();
+        foreach (Collider c in GetComponentsInChildren<Collider>(true))
         {
-            originalShadowModes[i] = renderers[i].shadowCastingMode;
+            originalCollidersEnabled[c] = c.enabled;
+            originalCollidersIsTrigger[c] = c.isTrigger;
         }
+
+        // Nastavit do výchozího stavu hned při startu (skryje AddedObject a ShadowChange)
+        ResetAnomaly();
     }
 
     void Update()
@@ -255,9 +260,46 @@ public class AnomalyController : MonoBehaviour
         }
         else if (anomalyType == AnomalyType.ShadowChange)
         {
+            gameObject.SetActive(true);
+            
+            // Vytvoříme černý Unlit materiál (aby ho nepřesvítila světla)
+            Shader unlitShader = Shader.Find("Unlit/Color");
+            if (unlitShader == null) unlitShader = Shader.Find("Universal Render Pipeline/Unlit");
+            
+            Material blackMaterial = null;
+            if (unlitShader != null)
+            {
+                blackMaterial = new Material(unlitShader);
+                if (blackMaterial.HasProperty("_Color")) blackMaterial.SetColor("_Color", Color.black);
+                if (blackMaterial.HasProperty("_BaseColor")) blackMaterial.SetColor("_BaseColor", Color.black);
+            }
+
             foreach (Renderer r in renderers)
             {
-                if (r != null) r.shadowCastingMode = targetShadowMode;
+                if (r != null)
+                {
+                    r.enabled = true;
+                    if (blackMaterial != null)
+                    {
+                        r.material = blackMaterial;
+                    }
+                    else
+                    {
+                        r.material.color = Color.black;
+                    }
+                    // Objekt sám o sobě už nebude vrhat další stín
+                    r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
+            }
+            
+            // Nastavíme kolize jako Trigger, aby hráč mohl "stínem" projít, ale foťák (raycast) ho trefil
+            foreach (Collider c in GetComponentsInChildren<Collider>(true))
+            {
+                if (c != null)
+                {
+                    c.enabled = true;
+                    c.isTrigger = true;
+                }
             }
         }
     }
@@ -293,16 +335,27 @@ public class AnomalyController : MonoBehaviour
             if (kvp.Key != null) kvp.Key.localRotation = kvp.Value;
         }
 
-        for (int i = 0; i < renderers.Length; i++)
+        if (originalCollidersEnabled != null)
         {
-            if (renderers[i] != null) renderers[i].shadowCastingMode = originalShadowModes[i];
+            foreach (var kvp in originalCollidersEnabled)
+            {
+                if (kvp.Key != null) kvp.Key.enabled = kvp.Value;
+            }
+        }
+        
+        if (originalCollidersIsTrigger != null)
+        {
+            foreach (var kvp in originalCollidersIsTrigger)
+            {
+                if (kvp.Key != null) kvp.Key.isTrigger = kvp.Value;
+            }
         }
 
         if (anomalyType == AnomalyType.MissingObject)
         {
             gameObject.SetActive(true);
         }
-        else if (anomalyType == AnomalyType.AddedObject)
+        else if (anomalyType == AnomalyType.AddedObject || anomalyType == AnomalyType.ShadowChange)
         {
             gameObject.SetActive(false);
         }
