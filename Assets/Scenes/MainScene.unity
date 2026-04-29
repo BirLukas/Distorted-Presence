@@ -11140,6 +11140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1197020722}
   - component: {fileID: 1197020721}
+  - component: {fileID: 1197020723}
   m_Layer: 0
   m_Name: AmbientManager
   m_TagString: Untagged
@@ -11259,6 +11260,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1197020723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197020719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033f4adcd0a36c747ad0061e6b0b9c67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtmosphereManager
+  ambientTracks: []
+  ambientVolume: 0.5
+  playAmbientOnStart: 1
+  whisperClips:
+  - {fileID: 8300000, guid: e3c67246c750ae943b3b8bbe8388441f, type: 3}
+  - {fileID: 8300000, guid: c2e7f98c226b43949bbed50aec9c8de2, type: 3}
+  - {fileID: 8300000, guid: e00993fbdd5a54b48b990ec13f92e02d, type: 3}
+  - {fileID: 8300000, guid: c013c6343bf112b4cbe4683a53386b29, type: 3}
+  - {fileID: 8300000, guid: 8d4c18e07dcc3bb40b1089994eb37f4a, type: 3}
+  - {fileID: 8300000, guid: 9f6f993f1d9725a4e9f5ec69c891945c, type: 3}
+  whisperVolume: 1
+  whisperMinDelay: 15
+  whisperMaxDelay: 40
+  scaleWithSanity: 1
+  lowSanityDelayMultiplier: 0.3
 --- !u!1001 &1202363070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12801,6 +12829,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8669240701490022791, guid: 797162f1e2611d14bac618083727de40, type: 3}
   m_PrefabInstance: {fileID: 1300918696}
   m_PrefabAsset: {fileID: 0}
+--- !u!134 &1302727688
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
 --- !u!1001 &1312570857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14929,7 +14970,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1592769294}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 1302727688}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -16885,6 +16926,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnomalyManager
   anomalies:
   - {fileID: 640155154}
+  - {fileID: 454027543}
+  - {fileID: 1592769295}
   minDelay: 2
   maxDelay: 3
 --- !u!4 &1811618169
