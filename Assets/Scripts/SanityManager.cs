@@ -6,7 +6,7 @@ public class SanityManager : MonoBehaviour
     public static SanityManager Instance { get; private set; }
 
     [Header("Settings")]
-    [Range(0f, 100f)]
+    [SerializeField, Range(0f, 100f)]
     private float currentSanity = 100f;
     public float CurrentSanity => currentSanity;
 
