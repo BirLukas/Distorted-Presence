@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class JumpscareManager : MonoBehaviour
 {
@@ -15,8 +16,14 @@ public class JumpscareManager : MonoBehaviour
     [Tooltip("How long the jumpscare lasts before showing the summary.")]
     public float jumpscareDuration = 4f;
 
+    [Header("Overlay Settings")]
+    [Tooltip("The fixed FOV for the jumpscare camera to avoid zoom issues.")]
+    public float jumpscareFOV = 60f;
+
     private AudioSource audioSource;
     private bool isJumpscareActive = false;
+    private Camera jumpscareCamera;
+    private int jumpscareLayer;
 
     private void Awake()
     {
@@ -36,19 +43,57 @@ public class JumpscareManager : MonoBehaviour
         // This ensures the audio can play even if the game is paused (timeScale = 0)
         audioSource.ignoreListenerPause = true;
         
+        jumpscareLayer = LayerMask.NameToLayer("Jumpscare");
+        if (jumpscareLayer == -1)
+        {
+            Debug.LogWarning("[JumpscareManager] 'Jumpscare' layer not found. Please create it in Tags and Layers.");
+        }
+
         if (jumpscareContainer != null)
         {
             jumpscareContainer.SetActive(false);
+        }
+
+        SetupJumpscareCamera();
+    }
+
+    private void SetupJumpscareCamera()
+    {
+        Camera mainCam = Camera.main;
+        if (mainCam == null || jumpscareLayer == -1) return;
+
+        // Ensure main camera ignores the Jumpscare layer
+        mainCam.cullingMask &= ~(1 << jumpscareLayer);
+
+        // Create overlay camera
+        GameObject camObj = new GameObject("JumpscareOverlayCamera");
+        camObj.transform.SetParent(mainCam.transform, false);
+        
+        jumpscareCamera = camObj.AddComponent<Camera>();
+        jumpscareCamera.CopyFrom(mainCam);
+        jumpscareCamera.cullingMask = 1 << jumpscareLayer;
+        jumpscareCamera.fieldOfView = jumpscareFOV;
+        jumpscareCamera.nearClipPlane = 0.01f; // Ensure it can see close objects
+        
+        var camData = jumpscareCamera.GetUniversalAdditionalCameraData();
+        if (camData != null)
+        {
+            camData.renderType = CameraRenderType.Overlay;
+        }
+        
+        var mainCamData = mainCam.GetUniversalAdditionalCameraData();
+        if (mainCamData != null)
+        {
+            if (!mainCamData.cameraStack.Contains(jumpscareCamera))
+            {
+                mainCamData.cameraStack.Add(jumpscareCamera);
+            }
         }
     }
 
     /// <summary>
     /// Triggers the jumpscare sequence and then shows the DaySummaryUI.
     /// </summary>
-    /// <param name="sanity">Current sanity to pass to the summary</param>
-    /// <param name="photographed">Number of photographed anomalies</param>
-    /// <param name="triggered">Total number of triggered anomalies</param>
-    /// <param name="reason">Reason for losing</param>
     public void TriggerJumpscare(float sanity, int photographed, int triggered, string reason)
     {
         if (isJumpscareActive) return;
@@ -65,9 +110,20 @@ public class JumpscareManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // 1. Activate the jumpscare visuals
+        // Force stop camera aiming/zoom to clean up UI
+        CameraSystem camSystem = FindFirstObjectByType<CameraSystem>();
+        if (camSystem != null)
+        {
+            camSystem.ForceStopAiming();
+        }
+
+        // 1. Activate the jumpscare visuals and set layer
         if (jumpscareContainer != null)
         {
+            if (jumpscareLayer != -1)
+            {
+                SetLayerRecursively(jumpscareContainer, jumpscareLayer);
+            }
             jumpscareContainer.SetActive(true);
         }
 
@@ -103,5 +159,15 @@ public class JumpscareManager : MonoBehaviour
         }
 
         isJumpscareActive = false;
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        if (obj == null) return;
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 }

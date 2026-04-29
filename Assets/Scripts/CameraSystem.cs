@@ -173,4 +173,23 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSecondsRealtime(flashDuration);
         if (flashGroup != null) flashGroup.alpha = 0f;
     }
+
+    public void ForceStopAiming()
+    {
+        isAimed = false;
+        IsAimingGlobal = false;
+        
+        if (cameraModel != null) cameraModel.SetActive(true);
+        if (cameraUI != null) cameraUI.SetActive(false);
+        
+        if (playerCamera != null)
+        {
+            playerCamera.fieldOfView = defaultFOV;
+        }
+        
+        if (overlayCamera != null)
+        {
+            overlayCamera.fieldOfView = defaultFOV;
+        }
+    }
 }
