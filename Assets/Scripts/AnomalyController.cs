@@ -101,8 +101,11 @@ public class AnomalyController : MonoBehaviour
             originalCollidersIsTrigger[c] = c.isTrigger;
         }
 
-        // Nastavit do výchozího stavu hned při startu (skryje AddedObject a ShadowChange)
-        ResetAnomaly();
+        // Nastavit do výchozího stavu hned při startu, pokud zrovna nebyla aktivována (skryje AddedObject a ShadowChange)
+        if (!isActive)
+        {
+            ResetAnomaly();
+        }
     }
 
     void Update()
