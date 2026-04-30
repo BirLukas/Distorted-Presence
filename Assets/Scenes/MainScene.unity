@@ -11841,7 +11841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7831870282753967291, guid: a0571d337b24b4e4eb9071b5b165a7b4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7831870282753967291, guid: a0571d337b24b4e4eb9071b5b165a7b4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12646,7 +12646,7 @@ MonoBehaviour:
   scaleMultiplier: 1.5
   illusionJitterIntensity: 0.005
   illusionRotationSpeed: 5
-  peripheralThreshold: 0.45
+  peripheralThreshold: 0.4
   onReportSound: {fileID: 0}
 --- !u!1001 &1292126358
 PrefabInstance:
