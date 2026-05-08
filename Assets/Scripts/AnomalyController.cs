@@ -36,6 +36,11 @@ public class AnomalyController : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioClip onReportSound;
+    [Tooltip("Zvuk, který se bude přehrávat ve smyčce s pauzou (např. smích).")]
+    public AudioClip intervalSound;
+    [Tooltip("Pauza v sekundách mezi přehráními zvuku.")]
+    public float delayBetweenSounds = 5f;
+    private float soundTimer = 0f;
     private AudioSource audioSource;
 
     private bool isActive = false;
@@ -58,7 +63,7 @@ public class AnomalyController : MonoBehaviour
     private Dictionary<Collider, bool> originalCollidersIsTrigger;
     void Start()
     {
-        if (onReportSound != null)
+        if (onReportSound != null || intervalSound != null)
         {
             audioSource = GetComponent<AudioSource>();
             if (audioSource == null)
@@ -111,6 +116,20 @@ public class AnomalyController : MonoBehaviour
     void Update()
     {
         if (!isActive) return;
+
+        if (intervalSound != null && audioSource != null)
+        {
+            if (!audioSource.isPlaying)
+            {
+                soundTimer -= Time.deltaTime;
+                if (soundTimer <= 0f)
+                {
+                    audioSource.clip = intervalSound;
+                    audioSource.Play();
+                    soundTimer = delayBetweenSounds;
+                }
+            }
+        }
 
         switch (anomalyType)
         {
@@ -225,6 +244,11 @@ public class AnomalyController : MonoBehaviour
         isActive = false;
         wasReported = true;
 
+        if (audioSource != null && audioSource.isPlaying && audioSource.clip == intervalSound)
+        {
+            audioSource.Stop();
+        }
+
         if (onReportSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(onReportSound);
@@ -234,6 +258,7 @@ public class AnomalyController : MonoBehaviour
     public void Activate()
     {
         isActive = true;
+        soundTimer = 0f;
 
         if (renderers == null) renderers = GetComponentsInChildren<Renderer>(true);
         if (lights == null) lights = GetComponentsInChildren<Light>(true);
@@ -309,6 +334,12 @@ public class AnomalyController : MonoBehaviour
     public void ResetAnomaly()
     {
         isActive = false;
+
+        if (audioSource != null && audioSource.isPlaying && audioSource.clip == intervalSound)
+        {
+            audioSource.Stop();
+        }
+        soundTimer = 0f;
 
         foreach (Renderer r in renderers) r.enabled = true;
         foreach (Light l in lights) l.enabled = true;

@@ -13,6 +13,8 @@ public class AnomalyControllerEditor : Editor
     private SerializedProperty illusionRotationSpeedProp;
     private SerializedProperty peripheralThresholdProp;
     private SerializedProperty onReportSoundProp;
+    private SerializedProperty intervalSoundProp;
+    private SerializedProperty delayBetweenSoundsProp;
 
     private void OnEnable()
     {
@@ -25,6 +27,8 @@ public class AnomalyControllerEditor : Editor
         illusionRotationSpeedProp = serializedObject.FindProperty("illusionRotationSpeed");
         peripheralThresholdProp = serializedObject.FindProperty("peripheralThreshold");
         onReportSoundProp = serializedObject.FindProperty("onReportSound");
+        intervalSoundProp = serializedObject.FindProperty("intervalSound");
+        delayBetweenSoundsProp = serializedObject.FindProperty("delayBetweenSounds");
     }
 
     public override void OnInspectorGUI()
@@ -38,7 +42,11 @@ public class AnomalyControllerEditor : Editor
         EditorGUILayout.Space();
 
         // Audio je pro všechny stejné
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Audio Settings", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(onReportSoundProp);
+        EditorGUILayout.PropertyField(intervalSoundProp);
+        EditorGUILayout.PropertyField(delayBetweenSoundsProp);
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Settings", EditorStyles.boldLabel);
