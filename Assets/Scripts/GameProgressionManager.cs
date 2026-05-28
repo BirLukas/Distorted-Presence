@@ -24,6 +24,9 @@ public class GameProgressionManager : MonoBehaviour
     // Lze nastavit i jinak, udelame ze napr. den 1 = 3 anomalie, den 5 = 7 anomalii
     public int MaxAnomaliesPerDay => 2 + currentDay;
 
+    [Header("Playthrough History")]
+    public System.Collections.Generic.List<string> activatedAnomalyNames = new System.Collections.Generic.List<string>();
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -54,5 +57,6 @@ public class GameProgressionManager : MonoBehaviour
     public void ResetProgression()
     {
         currentDay = 1;
+        activatedAnomalyNames.Clear();
     }
 }

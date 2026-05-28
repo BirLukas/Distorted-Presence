@@ -23,6 +23,10 @@ public class AnomalyManager : MonoBehaviour
         {
             minDelay = GameProgressionManager.Instance.CurrentMinDelay;
             maxDelay = GameProgressionManager.Instance.CurrentMaxDelay;
+            if (GameProgressionManager.Instance.currentDay == 1)
+            {
+                GameProgressionManager.Instance.activatedAnomalyNames.Clear();
+            }
         }
         ResetTimer();
     }
@@ -76,7 +80,11 @@ public class AnomalyManager : MonoBehaviour
             return;
         }
 
-        var inactive = anomalies.FindAll(a => !a.IsActive && !a.WasReported);
+        var inactive = anomalies.FindAll(a => 
+            !a.IsActive && 
+            !a.WasReported && 
+            (GameProgressionManager.Instance == null || !GameProgressionManager.Instance.activatedAnomalyNames.Contains(a.gameObject.name))
+        );
 
         if (inactive.Count == 0)
         {
@@ -84,11 +92,17 @@ public class AnomalyManager : MonoBehaviour
         }
 
         int index = Random.Range(0, inactive.Count);
-        inactive[index].Activate();
+        var selectedAnomaly = inactive[index];
+        selectedAnomaly.Activate();
+        
+        if (GameProgressionManager.Instance != null)
+        {
+            GameProgressionManager.Instance.activatedAnomalyNames.Add(selectedAnomaly.gameObject.name);
+        }
         
         generatedAnomaliesToday++;
 
-        Debug.Log($"Activated anomaly: {inactive[index].name} ({generatedAnomaliesToday}/{GameProgressionManager.Instance?.MaxAnomaliesPerDay ?? 0})");
+        Debug.Log($"Activated anomaly: {selectedAnomaly.name} ({generatedAnomaliesToday}/{GameProgressionManager.Instance?.MaxAnomaliesPerDay ?? 0})");
     }
 
     /// <summary>
