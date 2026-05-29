@@ -29,7 +29,7 @@ public class EndingSceneController : MonoBehaviour
 
             if (statsText != null)
             {
-                statsText.text = $"Total Anomalies Documented:\n<b>{totalFound} / {totalTriggered}</b>\n\nAccuracy:\n<b>{percentage:F0}%</b>";
+                statsText.text = $"Total\nAnomalies Documented:\n<b>{totalFound} / {totalTriggered}</b>\n\nAccuracy:\n<b>{percentage:F0}%</b>";
             }
 
             if (rankText != null)
