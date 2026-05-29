@@ -67,10 +67,19 @@ public class DaySummaryUI : MonoBehaviour
             }
         }
 
+        bool isFinalDay = (GameProgressionManager.Instance != null && GameProgressionManager.Instance.currentDay == GameProgressionManager.Instance.maxDays);
+
         // Nastavení textu tlačítka podle výsledku
         if (actionButtonText != null)
         {
-            actionButtonText.text = isVictory ? "Next Day" : "Restart";
+            if (isVictory)
+            {
+                actionButtonText.text = isFinalDay ? "Finish Game" : "Next Day";
+            }
+            else
+            {
+                actionButtonText.text = "Restart";
+            }
         }
 
         float percentage = totalCount > 0 ? (photographedCount / (float)totalCount) * 100f : 0f;
@@ -84,8 +93,16 @@ public class DaySummaryUI : MonoBehaviour
         // Titulek
         if (titleText != null)
         {
-            titleText.text = isVictory ? "You survived the day" : "You didn't survive the day";
-            titleText.color = isVictory ? winColor : loseColor;
+            if (isVictory)
+            {
+                titleText.text = isFinalDay ? "You survived all 5 days!" : "You survived the day";
+                titleText.color = winColor;
+            }
+            else
+            {
+                titleText.text = "You didn't survive the day";
+                titleText.color = loseColor;
+            }
         }
 
         // Sanita
@@ -173,14 +190,19 @@ public class DaySummaryUI : MonoBehaviour
 
         if (GameProgressionManager.Instance != null)
         {
-            if (lastResultWasVictory)
+            if (GameProgressionManager.Instance.IsGameFinished)
+            {
+                // Hra dohrána -> Načteme závěrečnou scénu se statistikami
+                UnityEngine.SceneManagement.SceneManager.LoadScene("EndingScene");
+            }
+            else if (lastResultWasVictory)
             {
                 // Jdeme na další den - reload aktuální scény pro restart anomálií a časovače
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             }
             else
             {
-                // Smrt (Nebo dohráno) -> Chtělo by to restart scén 
+                // Smrt -> restart scény a progrese
                 GameProgressionManager.Instance.ResetProgression();
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             }

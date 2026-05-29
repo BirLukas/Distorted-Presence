@@ -129,9 +129,23 @@ public class DayManager : MonoBehaviour
             }
         }
 
-        // Posun dne pokud je výhra
+        // Posun dne a uložení statistik pokud je výhra
         if (isVictory && GameProgressionManager.Instance != null)
         {
+            System.Collections.Generic.List<Texture2D> goodPhotos = new System.Collections.Generic.List<Texture2D>();
+            PhotoCapture pCapture = FindFirstObjectByType<PhotoCapture>();
+            if (pCapture != null)
+            {
+                foreach (var pd in pCapture.takenPhotos)
+                {
+                    if (pd.isCorrect && pd.snapshot != null)
+                    {
+                        goodPhotos.Add(pd.snapshot);
+                    }
+                }
+            }
+            
+            GameProgressionManager.Instance.AddDailyStats(photographed, triggered, goodPhotos);
             GameProgressionManager.Instance.AdvanceDay();
         }
 

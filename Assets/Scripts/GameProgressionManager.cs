@@ -8,6 +8,8 @@ public class GameProgressionManager : MonoBehaviour
     public int currentDay = 1;
     public int maxDays = 5;
 
+    public bool IsGameFinished { get; private set; }
+
     [Header("Difficulty Scaling")]
     public float baseMinGeneratedDelay = 10f;
     public float baseMaxGeneratedDelay = 20f;
@@ -27,6 +29,11 @@ public class GameProgressionManager : MonoBehaviour
     [Header("Playthrough History")]
     public System.Collections.Generic.List<string> activatedAnomalyNames = new System.Collections.Generic.List<string>();
 
+    [Header("Global Stats (Ending)")]
+    public int globalPhotographed = 0;
+    public int globalTriggered = 0;
+    public System.Collections.Generic.List<Texture2D> globalPhotos = new System.Collections.Generic.List<Texture2D>();
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -40,6 +47,24 @@ public class GameProgressionManager : MonoBehaviour
         }
     }
 
+    public void AddDailyStats(int photographed, int triggered, System.Collections.Generic.List<Texture2D> photosToKeep)
+    {
+        globalPhotographed += photographed;
+        globalTriggered += triggered;
+        
+        if (photosToKeep != null)
+        {
+            foreach(var p in photosToKeep)
+            {
+                // We keep up to 15 photos globally to avoid massive memory usage
+                if (globalPhotos.Count < 15)
+                {
+                    globalPhotos.Add(p);
+                }
+            }
+        }
+    }
+
     public void AdvanceDay()
     {
         if (currentDay < maxDays)
@@ -50,13 +75,18 @@ public class GameProgressionManager : MonoBehaviour
         else
         {
             Debug.Log("Game Finished! All 5 days completed.");
-            // TBD Vitezstvi
+            IsGameFinished = true;
         }
     }
 
     public void ResetProgression()
     {
         currentDay = 1;
+        IsGameFinished = false;
         activatedAnomalyNames.Clear();
+        
+        globalPhotographed = 0;
+        globalTriggered = 0;
+        globalPhotos.Clear();
     }
 }

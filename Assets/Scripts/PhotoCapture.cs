@@ -11,6 +11,7 @@ public class PhotoCapture : MonoBehaviour
     private int currentFilmCount;
 
     [Header("UI Settings")]
+    public GameObject cameraUI; // Přidej sem UI kamery, které se má na fotce skrýt
     public TextMeshProUGUI filmCountText;
     public GameObject noFilmWarningUI;
 
@@ -141,7 +142,10 @@ public class PhotoCapture : MonoBehaviour
 
     private System.Collections.IEnumerator CaptureScreenshotRoutine(bool isCorrect, string targetName, System.Action onSnapshotCaptured)
     {
-        // Čekáme pouze na konec framu (než se vyrenderuje UI bez blesku)
+        // Skryjeme UI kamery před pořízením snímku
+        if (cameraUI != null) cameraUI.SetActive(false);
+
+        // Čekáme na konec framu (než se vyrenderuje UI bez blesku a bez UI kamery)
         yield return new WaitForEndOfFrame();
 
         int width = Screen.width;
@@ -157,6 +161,9 @@ public class PhotoCapture : MonoBehaviour
         pd.targetName = targetName;
 
         takenPhotos.Add(pd);
+
+        // Vrátíme UI kamery zpět
+        if (cameraUI != null) cameraUI.SetActive(true);
 
         // Nyní odpálíme blesk!
         onSnapshotCaptured?.Invoke();
