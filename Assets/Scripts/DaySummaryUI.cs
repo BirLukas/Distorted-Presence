@@ -16,6 +16,9 @@ public class DaySummaryUI : MonoBehaviour
     public TextMeshProUGUI resultDetailText;
     public TextMeshProUGUI daysLeftText; // Nový text pro počet dnů
 
+    [Header("Button References")]
+    public TextMeshProUGUI actionButtonText; // Reference na text tlačítka "Další den / Restart"
+
     [Header("Photo Grid")]
     public GameObject photoReviewPanel; // Panel, který obsahuje Grid Parent (lze ho skrývat/zobrazovat)
     public Transform photoGridParent; // Rodič pro layout (Grid Layout Group)
@@ -49,6 +52,26 @@ public class DaySummaryUI : MonoBehaviour
         if (summaryPanel == null) return;
 
         summaryPanel.SetActive(true);
+
+        // Dynamické vyhledání textu tlačítka, pokud není přiřazeno v Inspektoru
+        if (actionButtonText == null)
+        {
+            foreach (var btn in summaryPanel.GetComponentsInChildren<Button>(true))
+            {
+                if (btn.gameObject.name == "NextDayButton" || btn.gameObject.name.Contains("NextDay") || btn.gameObject.name.Contains("Next"))
+                {
+                    actionButtonText = btn.GetComponentInChildren<TextMeshProUGUI>(true);
+                    if (actionButtonText != null)
+                        break;
+                }
+            }
+        }
+
+        // Nastavení textu tlačítka podle výsledku
+        if (actionButtonText != null)
+        {
+            actionButtonText.text = isVictory ? "Next Day" : "Restart";
+        }
 
         float percentage = totalCount > 0 ? (photographedCount / (float)totalCount) * 100f : 0f;
 
