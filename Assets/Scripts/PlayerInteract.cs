@@ -32,7 +32,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 focusedBook.OpenBook();
             }
-            else if (focusedDoor != null && !focusedDoor.isLocked && !focusedDoor.canEndDay)
+            else if (focusedDoor != null && !focusedDoor.isLocked)
             {
                 focusedDoor.ToggleDoor();
             }
@@ -100,7 +100,8 @@ public class PlayerInteract : MonoBehaviour
                         else
                         {
                             currentHoldTime = 0f;
-                            interactPrompt.text = "[Hold E] End Day";
+                            string action = door.isOpen ? "Close" : "Open";
+                            interactPrompt.text = $"[E] {action}\n[Hold E] End Day";
                         }
                     }
                     else if (door.isLocked)
