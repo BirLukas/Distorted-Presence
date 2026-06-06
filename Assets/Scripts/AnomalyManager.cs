@@ -41,6 +41,12 @@ public class AnomalyManager : MonoBehaviour
 
         if (!running) return;
 
+        // Anomálie se nespouští, dokud nezačne běžet herní čas (Den 1 všechny místnosti, další dny zpoždění)
+        if (DayManager.Instance != null && !DayManager.Instance.HasStarted)
+        {
+            return;
+        }
+
         timer -= Time.deltaTime;
 
         if (timer <= 0)

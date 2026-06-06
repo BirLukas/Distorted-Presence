@@ -16,6 +16,16 @@ public class DayManager : MonoBehaviour
     public TextMeshProUGUI clockText;
     public TextMeshProUGUI currentDayText;
 
+    // Nové vlastnosti pro startovací logiku
+    public static DayManager Instance { get; private set; }
+    public bool HasStarted { get; private set; } = false;
+    private float startDelayTimer = 20f;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         timer = dayDuration;
@@ -34,6 +44,31 @@ public class DayManager : MonoBehaviour
             if (clockText != null && clockText.gameObject.activeSelf)
                 clockText.gameObject.SetActive(false);
             return;
+        }
+
+        // Logika čekání na start
+        if (!HasStarted)
+        {
+            if (GameProgressionManager.Instance != null && GameProgressionManager.Instance.currentDay == 1)
+            {
+                // Den 1: Čekáme na projití všech místností
+                if (RoomManager.Instance != null && RoomManager.Instance.HaveAllRoomsBeenVisited())
+                {
+                    HasStarted = true;
+                }
+            }
+            else
+            {
+                // Ostatní dny: Čekáme 20 sekund
+                startDelayTimer -= Time.deltaTime;
+                if (startDelayTimer <= 0)
+                {
+                    HasStarted = true;
+                }
+            }
+
+            // Pokud stále neodstartováno, nepočítáme čas
+            if (!HasStarted) return;
         }
 
         if (timer > 0)
