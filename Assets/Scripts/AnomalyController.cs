@@ -43,6 +43,7 @@ public class AnomalyController : MonoBehaviour
     private float soundTimer = 0f;
     private AudioSource audioSource;
 
+    private GameObject currentShadowEffect;
     private bool isActive = false;
     public bool IsActive => isActive;
 
@@ -290,31 +291,11 @@ public class AnomalyController : MonoBehaviour
         {
             gameObject.SetActive(true);
             
-            // Vytvoříme černý Unlit materiál (aby ho nepřesvítila světla)
-            Shader unlitShader = Shader.Find("Unlit/Color");
-            if (unlitShader == null) unlitShader = Shader.Find("Universal Render Pipeline/Unlit");
-            
-            Material blackMaterial = null;
-            if (unlitShader != null)
-            {
-                blackMaterial = new Material(unlitShader);
-                if (blackMaterial.HasProperty("_Color")) blackMaterial.SetColor("_Color", Color.black);
-                if (blackMaterial.HasProperty("_BaseColor")) blackMaterial.SetColor("_BaseColor", Color.black);
-            }
-
             foreach (Renderer r in renderers)
             {
                 if (r != null)
                 {
                     r.enabled = true;
-                    if (blackMaterial != null)
-                    {
-                        r.material = blackMaterial;
-                    }
-                    else
-                    {
-                        r.material.color = Color.black;
-                    }
                     // Objekt sám o sobě už nebude vrhat další stín
                     r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 }
@@ -329,11 +310,94 @@ public class AnomalyController : MonoBehaviour
                     c.isTrigger = true;
                 }
             }
+
+            ApplyShadowEffects();
         }
     }
+    void ApplyShadowEffects()
+    {
+        if (currentShadowEffect != null)
+        {
+            Destroy(currentShadowEffect);
+        }
+
+        currentShadowEffect = new GameObject("ShadowAnomaly_VFX");
+        currentShadowEffect.transform.SetParent(transform, false);
+        // Zvedneme trochu nahoru, aby světlo a částice šly ze středu postavy (předpokládáme pivot dole)
+        currentShadowEffect.transform.localPosition = new Vector3(0, 1f, 0);
+
+        // 1. GLOWING EFEKT (světlo)
+        Color[] glowColors = new Color[]
+        {
+            new Color(0.7f, 0f, 1f),   // Fialová
+            new Color(0f, 1f, 0.8f),   // Teal / Modrozelená
+            new Color(1f, 0.2f, 0.2f)  // Červená
+        };
+        Color selectedColor = glowColors[Random.Range(0, glowColors.Length)];
+
+        Light glowLight = currentShadowEffect.AddComponent<Light>();
+        glowLight.type = LightType.Point;
+        glowLight.range = 1f;
+        glowLight.intensity = 0.5f; // Slabý glow efekt do okolí
+        glowLight.color = selectedColor;
+
+        // 2. ČÁSTICE (Particles)
+        ParticleSystem ps = currentShadowEffect.AddComponent<ParticleSystem>();
+        var main = ps.main;
+        main.loop = true;
+        main.playOnAwake = true;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        
+        // Částice už nemění barvu a jsou hodně slabé/průhledné (např. slabě černá/šedá "stínová" barva)
+        main.startColor = new Color(0.1f, 0.1f, 0.1f, 0.15f);
+
+        // 2 různé typy particles ze kterých se vybírá
+        int particleType = Random.Range(0, 2);
+        
+        var emission = ps.emission;
+        var shape = ps.shape;
+        shape.shapeType = ParticleSystemShapeType.Box;
+        shape.scale = new Vector3(1.2f, 1.8f, 1.2f);
+
+        if (particleType == 0) // Typ 1: Velmi jemný stoupající prach
+        {
+            main.startLifetime = 2.5f;
+            main.startSpeed = 0.3f;
+            main.startSize = 0.08f;
+            main.gravityModifier = -0.02f;
+            emission.rateOverTime = 15; // Méně výrazné, méně částic
+        }
+        else // Typ 2: Pomalá, lehce poletující stínová mlha/aura
+        {
+            main.startLifetime = 3f;
+            main.startSpeed = 0.05f;
+            main.startSize = 0.5f;
+            main.gravityModifier = 0f;
+            emission.rateOverTime = 8; // Málo částic, aby to nebylo moc výrazné
+            
+            var velocity = ps.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.2f, 0.2f);
+            velocity.y = new ParticleSystem.MinMaxCurve(-0.1f, 0.3f);
+            velocity.z = new ParticleSystem.MinMaxCurve(-0.2f, 0.2f);
+        }
+
+        var renderer = ps.GetComponent<ParticleSystemRenderer>();
+        // Shader, který funguje vždy a podporuje průhlednost a barvy částic
+        renderer.material = new Material(Shader.Find("Sprites/Default"));
+        
+        ps.Play();
+    }
+
     public void ResetAnomaly()
     {
         isActive = false;
+
+        if (currentShadowEffect != null)
+        {
+            Destroy(currentShadowEffect);
+            currentShadowEffect = null;
+        }
 
         if (audioSource != null && audioSource.isPlaying && audioSource.clip == intervalSound)
         {
