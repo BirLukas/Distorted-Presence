@@ -7,6 +7,7 @@ public class AnomalyControllerEditor : Editor
     private SerializedProperty anomalyTypeProp;
     private SerializedProperty transitionSpeedProp;
     private SerializedProperty targetColorProp;
+    private SerializedProperty targetMaterialIndexProp;
     private SerializedProperty scaleMultiplierProp;
     private SerializedProperty targetShadowModeProp;
     private SerializedProperty illusionJitterIntensityProp;
@@ -21,6 +22,7 @@ public class AnomalyControllerEditor : Editor
         anomalyTypeProp = serializedObject.FindProperty("anomalyType");
         transitionSpeedProp = serializedObject.FindProperty("transitionSpeed");
         targetColorProp = serializedObject.FindProperty("targetColor");
+        targetMaterialIndexProp = serializedObject.FindProperty("targetMaterialIndex");
         scaleMultiplierProp = serializedObject.FindProperty("scaleMultiplier");
         targetShadowModeProp = serializedObject.FindProperty("targetShadowMode");
         illusionJitterIntensityProp = serializedObject.FindProperty("illusionJitterIntensity");
@@ -64,6 +66,10 @@ public class AnomalyControllerEditor : Editor
             case AnomalyController.AnomalyType.ColorChange:
             case AnomalyController.AnomalyType.LightColorChange:
                 EditorGUILayout.PropertyField(targetColorProp);
+                if (type == AnomalyController.AnomalyType.ColorChange)
+                {
+                    EditorGUILayout.PropertyField(targetMaterialIndexProp);
+                }
                 break;
 
             case AnomalyController.AnomalyType.ScaleChange:

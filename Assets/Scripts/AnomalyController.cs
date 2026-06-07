@@ -22,6 +22,8 @@ public class AnomalyController : MonoBehaviour
 
     [Header("Color Settings")]
     public Color targetColor = Color.red;
+    [Tooltip("Zadejte index materiálu, který se má změnit. -1 znamená všechny materiály.")]
+    public int targetMaterialIndex = -1;
 
     [Header("Scale Settings")]
     public float scaleMultiplier = 1.5f;
@@ -51,7 +53,8 @@ public class AnomalyController : MonoBehaviour
     public bool WasReported => wasReported;
 
     private Renderer[] renderers;
-    private Color[] originalRendererColors;
+    private Material[][] rendererMaterials;
+    private Color[][] originalRendererColors;
 
     private Light[] lights;
     private Color[] originalLightColors;
@@ -76,10 +79,22 @@ public class AnomalyController : MonoBehaviour
         }
 
         renderers = GetComponentsInChildren<Renderer>(true);
-        originalRendererColors = new Color[renderers.Length];
+        rendererMaterials = new Material[renderers.Length][];
+        originalRendererColors = new Color[renderers.Length][];
         for (int i = 0; i < renderers.Length; i++)
         {
-            originalRendererColors[i] = renderers[i].material.color;
+            rendererMaterials[i] = renderers[i].materials;
+            originalRendererColors[i] = new Color[rendererMaterials[i].Length];
+            for (int m = 0; m < rendererMaterials[i].Length; m++)
+            {
+                Material mat = rendererMaterials[i][m];
+                if (mat.HasProperty("_BaseColor"))
+                    originalRendererColors[i][m] = mat.GetColor("_BaseColor");
+                else if (mat.HasProperty("_Color"))
+                    originalRendererColors[i][m] = mat.color;
+                else
+                    originalRendererColors[i][m] = Color.white;
+            }
         }
 
         lights = GetComponentsInChildren<Light>(true);
@@ -203,13 +218,26 @@ public class AnomalyController : MonoBehaviour
 
     void ApplyColorChange()
     {
-        for (int i = 0; i < renderers.Length; i++)
+        for (int i = 0; i < rendererMaterials.Length; i++)
         {
-            renderers[i].material.color = Color.Lerp(
-                renderers[i].material.color,
-                targetColor,
-                Time.deltaTime * transitionSpeed
-            );
+            for (int m = 0; m < rendererMaterials[i].Length; m++)
+            {
+                if (targetMaterialIndex != -1 && m != targetMaterialIndex) continue;
+
+                Material mat = rendererMaterials[i][m];
+                Color currentColor = mat.HasProperty("_BaseColor") ? mat.GetColor("_BaseColor") : mat.color;
+                Color newColor = Color.Lerp(
+                    currentColor,
+                    targetColor,
+                    Time.deltaTime * transitionSpeed
+                );
+
+                if (mat.HasProperty("_BaseColor"))
+                    mat.SetColor("_BaseColor", newColor);
+                
+                if (mat.HasProperty("_Color"))
+                    mat.color = newColor;
+            }
         }
     }
 
@@ -408,9 +436,17 @@ public class AnomalyController : MonoBehaviour
         foreach (Renderer r in renderers) r.enabled = true;
         foreach (Light l in lights) l.enabled = true;
 
-        for (int i = 0; i < renderers.Length; i++)
+        for (int i = 0; i < rendererMaterials.Length; i++)
         {
-            renderers[i].material.color = originalRendererColors[i];
+            for (int m = 0; m < rendererMaterials[i].Length; m++)
+            {
+                Material mat = rendererMaterials[i][m];
+                if (mat.HasProperty("_BaseColor"))
+                    mat.SetColor("_BaseColor", originalRendererColors[i][m]);
+                    
+                if (mat.HasProperty("_Color"))
+                    mat.color = originalRendererColors[i][m];
+            }
         }
 
         for (int i = 0; i < lights.Length; i++)

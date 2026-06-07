@@ -4,6 +4,14 @@ using System.Collections.Generic;
 public class AnomalyManager : MonoBehaviour
 {
     public static AnomalyManager Instance { get; private set; }
+    
+    [Header("Anomalies by Day")]
+    public List<AnomalyController> day1Anomalies = new List<AnomalyController>();
+    public List<AnomalyController> day2Anomalies = new List<AnomalyController>();
+    [Tooltip("Anomalies for days 3, 4, and 5")]
+    public List<AnomalyController> day3To5Anomalies = new List<AnomalyController>();
+
+    [HideInInspector]
     public List<AnomalyController> anomalies = new List<AnomalyController>();
 
     public float minDelay = 10f;
@@ -23,11 +31,28 @@ public class AnomalyManager : MonoBehaviour
         {
             minDelay = GameProgressionManager.Instance.CurrentMinDelay;
             maxDelay = GameProgressionManager.Instance.CurrentMaxDelay;
-            if (GameProgressionManager.Instance.currentDay == 1)
+            
+            int currentDay = GameProgressionManager.Instance.currentDay;
+
+            if (currentDay == 1)
             {
+                anomalies = new List<AnomalyController>(day1Anomalies);
                 GameProgressionManager.Instance.activatedAnomalyNames.Clear();
             }
+            else if (currentDay == 2)
+            {
+                anomalies = new List<AnomalyController>(day2Anomalies);
+            }
+            else
+            {
+                anomalies = new List<AnomalyController>(day3To5Anomalies);
+            }
         }
+        else
+        {
+            anomalies = new List<AnomalyController>(day1Anomalies);
+        }
+
         ResetTimer();
     }
 
