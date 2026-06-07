@@ -162,8 +162,22 @@ public class PhotoCapture : MonoBehaviour
 
         takenPhotos.Add(pd);
 
-        // Vrátíme UI kamery zpět
-        if (cameraUI != null) cameraUI.SetActive(true);
+        // Vrátíme UI kamery zpět, ale pouze pokud hra neskončila a hráč stále míří
+        if (cameraUI != null)
+        {
+            if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver)
+            {
+                cameraUI.SetActive(false);
+            }
+            else if (!CameraSystem.IsAimingGlobal)
+            {
+                cameraUI.SetActive(false);
+            }
+            else
+            {
+                cameraUI.SetActive(true);
+            }
+        }
 
         // Nyní odpálíme blesk!
         onSnapshotCaptured?.Invoke();
