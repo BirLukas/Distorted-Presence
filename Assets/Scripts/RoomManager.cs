@@ -7,6 +7,9 @@ public class RoomManager : MonoBehaviour
 
     private HashSet<RoomTrigger> allRooms = new HashSet<RoomTrigger>();
     private HashSet<RoomTrigger> visitedRooms = new HashSet<RoomTrigger>();
+    
+    public int TotalRoomCount => allRooms.Count;
+    public int VisitedRoomCount => visitedRooms.Count;
 
     private void Awake()
     {

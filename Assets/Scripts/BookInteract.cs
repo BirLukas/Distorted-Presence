@@ -26,6 +26,7 @@ public class BookInteract : MonoBehaviour
 
     private MouseLook mouseLook;
     public static bool IsUIOpen = false;
+    public static bool TutorialCanOpen = true;
 
     void Start()
     {
@@ -48,7 +49,7 @@ public class BookInteract : MonoBehaviour
 
     public void OpenBook()
     {
-        if (isReading) return;
+        if (!TutorialCanOpen || isReading) return;
 
         IsUIOpen = true;
         isReading = true;

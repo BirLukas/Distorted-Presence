@@ -69,7 +69,14 @@ public class PlayerInteract : MonoBehaviour
                 focusedBook = book;
                 if (interactPrompt != null)
                 {
-                    interactPrompt.text = "[E] Read";
+                    if (BookInteract.TutorialCanOpen)
+                    {
+                        interactPrompt.text = "[E] Read";
+                    }
+                    else
+                    {
+                        interactPrompt.text = "Follow instructions first";
+                    }
                     interactPrompt.gameObject.SetActive(true);
                 }
                 return;
