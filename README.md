@@ -46,7 +46,7 @@ Anomálie se dělí do několika kategorií a každá z nich mění prostředí 
 ## 🧠 Klíčové Herní Systémy
 
 ### 📸 Fotoaparát & Focení
-* Hráč nosí fotoaparát s **omezeným počtem snímků** (základní kapacita je 10 filmů). Film je nutné šetřit!
+* Hráč nosí fotoaparát s **omezeným počtem snímků**. Film je nutné šetřit!
 * Stisknutím a podržením **Pravého tlačítka myši (RMB)** přiložíte fotoaparát k očím (zoom a zobrazení hledáčku UI).
 * Stisknutím **Levého tlačítka myši (LMB)** během míření pořídíte fotografii. To vyvolá silný blesk osvětlující okolí.
 * Pokud blesk fotoaparátu zachytí aktivní anomálii, je nahlášena (deaktivována) a hráč získává bonus k příčetnosti.
@@ -55,8 +55,8 @@ Anomálie se dělí do několika kategorií a každá z nich mění prostředí 
 ### 🧪 Duševní zdraví (Sanity)
 * Hráč začíná se **100%** duševním zdravím.
 * Každá aktivní a nenahlášená anomálie pomalu odčerpává sanitu každou sekundu. Čím více anomálií ignorujete, tím rychleji šílenství postupuje.
-* **Správná fotka**: Obnoví **+5 %** sanity a odstraní anomálii.
-* **Chybná fotka**: Penalizuje hráče o **-10 %** sanity.
+* **Správná fotka**: Obnoví **X %** sanity, podle dnu.
+* **Chybná fotka**: Penalizuje hráče o **-X %** sanity, podle dnu.
 * Pokud sanita klesne na **0 %**, hráč okamžitě podlehne šílenství, je jumpscared a hra končí prohrou.
 
 ### 🏆 Vyhodnocení & Závěrečné Ranky
@@ -90,7 +90,7 @@ Po přežití všech 5 dní je hráč přenesen na obrazovku **EndingScene**, kt
 
 ## 🛠️ Technické Detaily Projektu
 
-* **Herní Engine**: Unity 2022+ (kompatibilní s moderními verzemi).
+* **Herní Engine**: Unity 6.3 (kompatibilní s moderními verzemi).
 * **Renderovací Pipeline**: Universal Render Pipeline (URP).
 * **Vstupní systém**: New Input System (využívá `InputSystem_Actions`).
 * **Kamerový Stack**: Hra využívá pokročilé překrývání kamer (Camera Stacking) v URP. 3D model fotoaparátu v rukou hráče je renderován na speciální overlay kameře (`ViewModelCamera`). Tím je zamezeno nepříjemnému prolínání (clippingu) fotoaparátu skrz zdi a překážky v prostředí. Podobně je řešena i overlay kamera pro jumpscary.
