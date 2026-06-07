@@ -23,6 +23,36 @@ public static class DebugMenuTools
         EditorApplication.isPlaying = true;
     }
 
+    [MenuItem("Tools/Skip To Next Day")]
+    public static void SkipToNextDay()
+    {
+        if (!EditorApplication.isPlaying)
+        {
+            Debug.LogWarning("You must be in Play Mode to skip to the next day.");
+            return;
+        }
+
+        GameProgressionManager gpm = GameProgressionManager.Instance;
+        if (gpm != null)
+        {
+            gpm.AdvanceDay();
+            if (gpm.IsGameFinished)
+            {
+                SceneManager.LoadScene("EndingScene");
+            }
+            else
+            {
+                // Reload current scene to start the new day
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            Debug.Log("Skipped to Day " + gpm.currentDay);
+        }
+        else
+        {
+            Debug.LogError("GameProgressionManager not found!");
+        }
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InjectStatsOnPlay()
     {
