@@ -53,6 +53,41 @@ public static class DebugMenuTools
         }
     }
 
+    [MenuItem("Tools/Skip Tutorial")]
+    public static void SkipTutorial()
+    {
+        if (!EditorApplication.isPlaying)
+        {
+            Debug.LogWarning("You must be in Play Mode to skip the tutorial.");
+            return;
+        }
+
+        TutorialManager tutorialManager = Object.FindFirstObjectByType<TutorialManager>();
+        if (tutorialManager != null)
+        {
+            tutorialManager.StopTutorial();
+        }
+
+        BookInteract.TutorialCanOpen = true;
+
+        Door[] doors = Object.FindObjectsByType<Door>(FindObjectsSortMode.None);
+        foreach (Door door in doors)
+        {
+            door.UnlockDoor();
+        }
+
+        BookUnlockDoor[] bookUnlockDoors = Object.FindObjectsByType<BookUnlockDoor>(FindObjectsSortMode.None);
+        foreach (BookUnlockDoor bud in bookUnlockDoors)
+        {
+            if (bud.lightToTurnOff != null)
+            {
+                bud.lightToTurnOff.enabled = false;
+            }
+        }
+
+        Debug.Log($"Skipped tutorial and unlocked {doors.Length} doors.");
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InjectStatsOnPlay()
     {
