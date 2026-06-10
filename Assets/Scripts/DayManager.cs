@@ -93,10 +93,6 @@ public class DayManager : MonoBehaviour
         clockText.text = string.Format("{0:00}:{1:00} AM", hours, minutes);
     }
 
-    /// <summary>
-    /// Ukončí den – zkontroluje podmínky výhry/prohry a zobrazí souhrn.
-    /// Volá se buď uplynutím času, nebo odchodem dveřmi.
-    /// </summary>
     public void EndDay()
     {
         if (isDayEnded) return;

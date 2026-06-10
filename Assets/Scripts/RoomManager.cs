@@ -37,10 +37,6 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Returns true if there are rooms registered and all of them have been visited.
-    /// Also returns true if no rooms are registered (to prevent soft-locking if rooms aren't setup yet).
-    /// </summary>
     public bool HaveAllRoomsBeenVisited()
     {
         if (allRooms.Count == 0) return true;

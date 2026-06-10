@@ -149,9 +149,6 @@ public class JumpscareManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Triggers the jumpscare sequence and then shows the DaySummaryUI.
-    /// </summary>
     public void TriggerJumpscare(float sanity, int photographed, int triggered, string reason)
     {
         if (isJumpscareActive) return;
