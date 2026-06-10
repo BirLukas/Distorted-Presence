@@ -93,26 +93,35 @@ public class JumpscareManager : MonoBehaviour
         backdropPlane.transform.localPosition = new Vector3(0, 0, 5f); 
         backdropPlane.transform.localScale = new Vector3(20, 20, 1);
         
+        backdropPlane.SetActive(false); // Skryjeme okamžitě, aby při chybě nezůstal zapnutý!
+        
         Destroy(backdropPlane.GetComponent<MeshCollider>());
         
         Renderer rend = backdropPlane.GetComponent<Renderer>();
         Shader unlitShader = Shader.Find("Universal Render Pipeline/Unlit");
         if (unlitShader == null) unlitShader = Shader.Find("Unlit/Transparent");
         
-        Material mat = new Material(unlitShader);
-        mat.color = new Color(0, 0, 0, backdropOpacity);
-        
-        if (unlitShader.name.Contains("Universal"))
+        if (unlitShader != null)
         {
-            mat.SetFloat("_Surface", 1); // Transparent
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            mat.SetInt("_ZWrite", 0);
+            Material mat = new Material(unlitShader);
+            mat.color = new Color(0, 0, 0, backdropOpacity);
+            
+            if (unlitShader.name.Contains("Universal"))
+            {
+                mat.SetFloat("_Surface", 1); // Transparent
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetInt("_ZWrite", 0);
+            }
+            
+            rend.material = mat;
+        }
+        else
+        {
+            rend.enabled = false; // Pokud se shader v buildu ztratí, radši objekt zneviditelníme
         }
         
-        rend.material = mat;
         backdropPlane.layer = jumpscareLayer;
-        backdropPlane.SetActive(false);
     }
 
     private void SetupJumpscareCamera()
