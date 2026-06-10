@@ -107,6 +107,8 @@ public class CameraSystem : MonoBehaviour
             return;
         }
 
+        if (PauseManager.IsPaused) return;
+
         isAimed = value.isPressed;
 
         if (isAimed) AimCamera();
@@ -116,6 +118,7 @@ public class CameraSystem : MonoBehaviour
     public void OnFire(InputValue value)
     {
         if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver) return;
+        if (PauseManager.IsPaused) return;
 
         if (value.isPressed && isAimed)
         {
@@ -125,6 +128,11 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        if (PauseManager.IsPaused && isAimed)
+        {
+            ForceStopAiming();
+        }
+
         float targetFOV = isAimed ? aimedFOV : defaultFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, targetFOV, Time.deltaTime * aimSpeed);
         

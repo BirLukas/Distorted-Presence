@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Security;
 
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (value.isPressed && isGrounded && !BookInteract.IsUIOpen)
+        if (value.isPressed && isGrounded && !BookInteract.IsUIOpen && !PauseManager.IsPaused)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (BookInteract.IsUIOpen)
+        if (BookInteract.IsUIOpen || PauseManager.IsPaused)
         {
             moveInput = Vector2.zero;
             return;

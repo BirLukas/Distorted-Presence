@@ -28,7 +28,7 @@ public class MouseLook : MonoBehaviour
 
     public void UpdateCursorState()
     {
-        if (!BookInteract.IsUIOpen)
+        if (!BookInteract.IsUIOpen && !PauseManager.IsPaused)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -48,7 +48,7 @@ public class MouseLook : MonoBehaviour
     void LateUpdate()
     {
         if (SanityManager.Instance != null && SanityManager.Instance.IsGameOver) return;
-        if (BookInteract.IsUIOpen) return;
+        if (BookInteract.IsUIOpen || PauseManager.IsPaused) return;
 
         float mouseX = lookInput.x * mouseSensitivity;
         float mouseY = lookInput.y * mouseSensitivity;

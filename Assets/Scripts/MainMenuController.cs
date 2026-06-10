@@ -4,6 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    [Header("UI Panels")]
+    public GameObject mainButtonsPanel;
+    public GameObject settingsMenuPanel;
+
     void Start()
     {
         Button playButton = GameObject.Find("StartGameButton")?.GetComponent<Button>();
@@ -24,7 +28,14 @@ public class MainMenuController : MonoBehaviour
     public void OpenSettings()
     {
         Debug.Log("Settings button clicked!");
-        // TODO: Enable Settings UI panel when created
+        if (mainButtonsPanel != null) mainButtonsPanel.SetActive(false);
+        if (settingsMenuPanel != null) settingsMenuPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        if (settingsMenuPanel != null) settingsMenuPanel.SetActive(false);
+        if (mainButtonsPanel != null) mainButtonsPanel.SetActive(true);
     }
 
     public void QuitGame()
