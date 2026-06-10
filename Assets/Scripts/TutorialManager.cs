@@ -125,4 +125,14 @@ public class TutorialManager : MonoBehaviour
             tutorialText.text = text;
         }
     }
+
+    public void StopTutorial()
+    {
+        StopAllCoroutines();
+        isTutorialActive = false;
+        if (tutorialText != null)
+        {
+            tutorialText.gameObject.SetActive(false);
+        }
+    }
 }

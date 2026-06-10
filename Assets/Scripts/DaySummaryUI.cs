@@ -53,6 +53,12 @@ public class DaySummaryUI : MonoBehaviour
 
         summaryPanel.SetActive(true);
 
+        // Skrýt text tutoriálu, pokud by náhodou běžel
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.StopTutorial();
+        }
+
         // Dynamické vyhledání textu tlačítka, pokud není přiřazeno v Inspektoru
         if (actionButtonText == null)
         {
