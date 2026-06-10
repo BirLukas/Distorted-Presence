@@ -43,6 +43,8 @@ public class GameProgressionManager : MonoBehaviour
         else
         {
             Instance = this;
+            // Detach from parent to become a root object so DontDestroyOnLoad works
+            transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
         }
     }
