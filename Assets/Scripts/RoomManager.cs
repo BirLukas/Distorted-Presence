@@ -42,4 +42,9 @@ public class RoomManager : MonoBehaviour
         if (allRooms.Count == 0) return true;
         return visitedRooms.Count >= allRooms.Count;
     }
+
+    public void ForceAllRoomsVisited()
+    {
+        visitedRooms = new HashSet<RoomTrigger>(allRooms);
+    }
 }

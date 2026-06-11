@@ -61,6 +61,11 @@ public class BookInteract : MonoBehaviour
             hasBeenRead = true;
     }
 
+    public void ForceRead()
+    {
+        hasBeenRead = true;
+    }
+
     public void CloseBook()
     {
         IsUIOpen = false;
