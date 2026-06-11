@@ -9,6 +9,7 @@ public class SettingsManager : MonoBehaviour
     public TMP_Dropdown resolutionDropdown;
     public TMP_Dropdown graphicsDropdown;
     public Slider volumeSlider;
+    public Slider sensitivitySlider;
 
     private Resolution[] resolutions;
 
@@ -76,6 +77,21 @@ public class SettingsManager : MonoBehaviour
                 volumeSlider.value = AudioListener.volume;
             }
         }
+
+        // Setup sensitivity
+        if (sensitivitySlider != null)
+        {
+            if (PlayerPrefs.HasKey("MouseSensitivity"))
+            {
+                float sens = PlayerPrefs.GetFloat("MouseSensitivity");
+                sensitivitySlider.value = sens;
+                SetSensitivity(sens);
+            }
+            else
+            {
+                sensitivitySlider.value = 0.1f;
+            }
+        }
     }
 
     public void SetResolution(int resolutionIndex)
@@ -93,6 +109,18 @@ public class SettingsManager : MonoBehaviour
         AudioListener.volume = volume;
         PlayerPrefs.SetFloat("MasterVolume", volume);
         PlayerPrefs.Save();
+    }
+
+    public void SetSensitivity(float sensitivity)
+    {
+        PlayerPrefs.SetFloat("MouseSensitivity", sensitivity);
+        PlayerPrefs.Save();
+        
+        MouseLook[] mouseLooks = FindObjectsByType<MouseLook>(FindObjectsSortMode.None);
+        foreach (var ml in mouseLooks)
+        {
+            ml.mouseSensitivity = sensitivity;
+        }
     }
 
     public void SetQuality(int qualityIndex)
